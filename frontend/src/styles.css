@@ -1,36 +1,37 @@
-body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    background-color: #0835eb;
-    margin: 0;
-    padding: 0;
-  }
-  
-  .container {
-    margin-top: 10%;
-  }
-  
-  h1 {
-    font-size: 2.5em;
-  }
-  
-  p {
-    font-size: 1.2em;
-  }
-  
-  .options button {
-    padding: 10px 20px;
-    margin: 10px;
-    font-size: 1.2em;
-    border: none;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background 0.3s;
-  }
-  
-  .options button:hover {
-    background-color: #0056b3;
-  }
-  
+/* Start Page Styles */
+.start-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #1a1a1a;
+  color: white;
+  text-align: center;
+}
+
+.title {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+.play-button {
+  padding: 12px 24px;
+  font-size: 1.5rem;
+  border: none;
+  background-color: #ffcc00;
+  color: black;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.3s;
+}
+
+.play-button:hover {
+  background-color: #ffaa00;
+}
+
+.credits {
+  margin-top: 20px;
+  font-size: 1rem;
+  opacity: 0.8;
+}
