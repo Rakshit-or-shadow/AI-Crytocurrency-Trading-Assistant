@@ -10,16 +10,16 @@ const LandingPage: React.FC = () => {
       <h1>Welcome!</h1>
       <div className="options">
       <h3>Which company do you wanna trade?</h3>
-        <button onClick={() => navigate("/NVDA")}>NVIDIA</button>
-        <button onClick={() => navigate("GOOGL")}>GOOGLE</button>
-        <button onClick={() => navigate("/APPL")}>APPLE</button>
-        <button onClick={() => navigate("/META")}>META</button>
-        <button onClick={() => navigate("/TSLA")}>TESLA</button>
-        <button onClick={() => navigate("/MSFT")}>MICROSOFT</button>
-        <button onClick={() => navigate("/PLTR")}>PALANTIR</button>
-        <button onClick={() => navigate("/AMZN")}>AMAZON</button>
-        <button onClick={() => navigate("/AMD")}>AMD</button>
-        <button onClick={() => navigate("/INTC")}>INTEL</button>
+        <button onClick={() => navigate("/company/NVIDIA")}>NVIDIA</button>
+        <button onClick={() => navigate("/company/ALPHABET")}>GOOGLE</button>
+        <button onClick={() => navigate("company/APPLE")}>APPLE</button>
+        <button onClick={() => navigate("/company/META")}>META</button>
+        <button onClick={() => navigate("/company/TESLA")}>TESLA</button>
+        <button onClick={() => navigate("/company/MICROSOFT")}>MICROSOFT</button>
+        <button onClick={() => navigate("/company/PALANTIR")}>PALANTIR</button>
+        <button onClick={() => navigate("/company/AMAZON")}>AMAZON</button>
+        <button onClick={() => navigate("/company/AMD")}>AMD</button>
+        <button onClick={() => navigate("/company/INTEL")}>INTEL</button>
       </div>
     </div>
   );
