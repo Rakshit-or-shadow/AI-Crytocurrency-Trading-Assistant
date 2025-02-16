@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
+import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid} from "recharts";
 
 const CompanyPage: React.FC = () => {
   const { companyName } = useParams<{ companyName: string }>();
-  const [timeInterval, setTimeInterval] = useState(30000); // Default: 30 sec
+  const [timeInterval, setTimeInterval] = useState(4000); // Default: 5 sec
   const [priceHistory, setPriceHistory] = useState<{ time: string; price: number }[]>([]);
 
   useEffect(() => {
@@ -46,13 +46,15 @@ const CompanyPage: React.FC = () => {
       </select>
 
       {/* Live Price Graph */}
-      <LineChart width={600} height={400} data={priceHistory}>
-        <CartesianGrid stroke="#ccc" />
-        <XAxis dataKey="time" />
-        <YAxis domain={[92000,'auto']}/>
-        <Tooltip />
-        <Line type="monotone" dataKey="price" stroke="#007bff" />
-      </LineChart>
+      {/* <ResponsiveContainer width="100%" height={400}> */}
+        <LineChart width= {900} height={400}  data={priceHistory}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="time" tick={{ fontSize: 12 }} stroke="grey"/>
+            <YAxis scale="log" domain={[96000, 97000]} tick={{ fontSize: 12 }} stroke="grey"/>
+            <Tooltip />
+            <Line type="monotone" dataKey="price" stroke="#007bff" strokeWidth={2} />
+        </LineChart>
+    {/* </ResponsiveContainer> */}
     </div>
   );
 };
