@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "./styles.css"; // Import the CSS file
+import "./LandingPage.css"; // Import the CSS file
 
 const LandingPage: React.FC = () => {
   const navigate = useNavigate();
@@ -10,16 +10,16 @@ const LandingPage: React.FC = () => {
       <h1>Welcome!</h1>
       <div className="options">
       <h3>Which company do you wanna trade?</h3>
-        <button onClick={() => navigate("/explore")}>Company1</button>
-        <button onClick={() => navigate("/learn")}>Company2</button>
-        <button onClick={() => navigate("/trade")}>Company3</button>
-        <button onClick={() => navigate("/contact")}>Company4</button>
-        <button onClick={() => navigate("/contact")}>Company5</button>
-        <button onClick={() => navigate("/contact")}>Company6</button>
-        <button onClick={() => navigate("/contact")}>Company7</button>
-        <button onClick={() => navigate("/contact")}>Company8</button>
-        <button onClick={() => navigate("/contact")}>Company9</button>
-        <button onClick={() => navigate("/contact")}>Company10</button>
+        <button onClick={() => navigate("/NVDA")}>NVIDIA</button>
+        <button onClick={() => navigate("GOOGL")}>GOOGLE</button>
+        <button onClick={() => navigate("/APPL")}>APPLE</button>
+        <button onClick={() => navigate("/META")}>META</button>
+        <button onClick={() => navigate("/TSLA")}>TESLA</button>
+        <button onClick={() => navigate("/MSFT")}>MICROSOFT</button>
+        <button onClick={() => navigate("/PLTR")}>PALANTIR</button>
+        <button onClick={() => navigate("/AMZN")}>AMAZON</button>
+        <button onClick={() => navigate("/AMD")}>AMD</button>
+        <button onClick={() => navigate("/INTC")}>INTEL</button>
       </div>
     </div>
   );
