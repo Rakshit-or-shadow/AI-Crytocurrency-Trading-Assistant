@@ -24,8 +24,11 @@ const CompanyPage: React.FC = () => {
         onChange={(e) => setTimeInterval(e.target.value)}
         className="dropdown"
       >
+        <option value="15sec">15 Seconds</option>
         <option value="30sec">30 Seconds</option>
         <option value="1min">1 Minute</option>
+        <option value="2min">2 Minute</option>
+        <option value="5min">5 Minute</option>
       </select>
 
       {/* Graph (Replace sampleData with backend data) */}
