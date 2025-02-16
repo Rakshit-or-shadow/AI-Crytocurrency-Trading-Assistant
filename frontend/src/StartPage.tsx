@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "./StartPage.css"
-import "./styles.css"; // Import global styles
+import "./styles/StartPage.css"
+import "./styles/main.css"; // Import global styles
 
 
 const StartPage: React.FC = () => {

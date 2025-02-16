@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "./LandingPage.css"; 
-import "./styles.css"
+import "./styles/LandingPage.css"; 
+import "./styles/main.css"
 
 
 const LandingPage: React.FC = () => {

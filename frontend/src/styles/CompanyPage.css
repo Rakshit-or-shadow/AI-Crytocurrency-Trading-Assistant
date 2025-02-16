@@ -1,0 +1,32 @@
+.company-container {
+    text-align: center;
+    background-color: black;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  
+  .chart-container {
+    background-color: black;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  
+  .linechart {
+    stroke-width: 3;
+  }
+  
+  button {
+    background-color: limegreen !important; 
+    color: black;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  button:hover {
+    background-color: darkgreen;
+  }

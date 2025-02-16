@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
-import "./styles.css";
+import "./styles/CompanyPage.css";
+
+// import "./styles/main.css";
 
 const CompanyPage: React.FC = () => {
   const { companyName } = useParams<{ companyName: string }>();
