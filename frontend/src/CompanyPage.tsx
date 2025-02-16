@@ -1,44 +1,49 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
-import "./styles.css";
+import "./CompanyStyle.css"; // Import your new CSS file
 
 const CompanyPage: React.FC = () => {
   const { companyName } = useParams<{ companyName: string }>();
-  const [timeInterval, setTimeInterval] = useState("30sec");
+  const [priceData, setPriceData] = useState<{ time: string; price: number }[]>([]);
+  
+  // Fetch live price every second
+  useEffect(() => {
+    const fetchPrice = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/price");  // Use backend API
+        const data = await response.json();
+        if (data.price !== undefined && data.price !== null) {
+          const now = new Date();
+          const timeLabel = now.toLocaleTimeString();
+          setPriceData((prevData) => [...prevData, { time: timeLabel, price: data.price }]);
+        }
+      } catch (error) {
+        console.error("Error fetching price:", error);
+      }
+    };
 
-  // Placeholder data (Replace with real data from your backend)
-  const sampleData = [
-    { time: "10:00", price: 100 },
-    { time: "10:30", price: 102 },
-    { time: "11:00", price: 98 },
-  ];
+    const intervalId = setInterval(fetchPrice, 1000);
+    return () => clearInterval(intervalId); // Cleanup
+  }, []);
 
   return (
     <div className="company-container">
-      <h1>{companyName} <br /></h1>
+      <h1>{companyName}</h1>
 
-      {/* Dropdown to select time interval */}
-      <select
-        value={timeInterval}
-        onChange={(e) => setTimeInterval(e.target.value)}
-        className="dropdown"
-      >
-        <option value="15sec">15 Seconds</option>
-        <option value="30sec">30 Seconds</option>
-        <option value="1min">1 Minute</option>
-        <option value="2min">2 Minute</option>
-        <option value="5min">5 Minute</option>
-      </select>
+      {/* Live price chart */}
+      <div className="chart-container">
+        <LineChart className="linechart" width={700} height={400} data={priceData}>
+          <CartesianGrid stroke="rgba(255, 255, 255, 0.2)" />
+          <XAxis dataKey="time" stroke="white" />
+          <YAxis stroke="white" />
+          <Tooltip />
+          <Line type="monotone" dataKey="price" stroke="limegreen" strokeWidth={3} />
+        </LineChart>
+      </div>
 
-      {/* Graph (Replace sampleData with backend data) */}
-      <LineChart width={600} height={300} data={sampleData}>
-        <CartesianGrid stroke="#ccc" />
-        <XAxis dataKey="time" />
-        <YAxis />
-        <Tooltip />
-        <Line type="monotone" dataKey="price" stroke="#007bff" />
-      </LineChart>
+      {/* Example Button */}
+      <button>Sample Button</button>
     </div>
   );
 };
