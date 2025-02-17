@@ -4,9 +4,8 @@ body {
 }
 
 body {
-  font-family: 'Monserrate'!important;
+  font-family: 'Graphik', sans-serif !important;
 }
-
 
 button {
   background-color: #58b785;
@@ -27,5 +26,4 @@ button:hover{
   border: 2px solid #f3eeee;
   background-color: transparent;
   color: black;
-  
 }
