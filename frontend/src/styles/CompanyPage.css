@@ -198,10 +198,11 @@ button:hover {
     flex: 1;
     padding: 8px;
     background: #1c1c1c;
-    border: 1px solid rgba(255, 255, 255, 0.4);
+    border: 1px solid rgb(76, 175, 80);
     color: white;
     border-radius: 6px;
     text-align: center;
+    
 }
 
 /* Fix Button Alignment */
@@ -215,7 +216,7 @@ button:hover {
 }
 
 .buy-button {
-    background-color: #4caf50;
+    background-color: rgb(76, 175, 80);
     color: white;
 }
 
@@ -227,4 +228,18 @@ button:hover {
 .reset-button {
     background-color: #ff9800;
     color: white;
+}
+
+.reset-button:hover{
+    border: 2px solid  rgb(76, 175, 80);
+    background-color: transparent;
+}
+
+.buy-button:hover{
+    border: 2px solid  rgb(76, 175, 80);
+    background-color: transparent;
+}
+.sell-button:hover{
+    border: 2px solid red;
+    background-color: transparent;
 }

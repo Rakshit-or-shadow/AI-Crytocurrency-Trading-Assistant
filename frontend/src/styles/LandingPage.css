@@ -1,6 +1,6 @@
 /* Set a dark background and light text for the body */
-body {
-    background: #121212;
+ body {
+    background-color: #121212 !important;
     color: #ffffff;
     margin: 0;
     display: flex;
@@ -15,7 +15,6 @@ body {
     text-align: center;
     width: 90%;
     max-width: 1000px;
-    background: rgba(20, 20, 20, 0.85);
     padding: 60px;
     border-radius: 20px;
     border: 2px solid rgba(255, 255, 255, 0.2);
