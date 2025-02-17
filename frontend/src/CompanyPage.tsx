@@ -165,61 +165,72 @@ const handleBuy = async () => {
         </div>
       </div>
   
-    <div className="bottom-columns">
-      {/* Left Column: Wallet Info (Purse & Holdings) */}
-      <div className="left-column">
-        <div className="wallet-info">
-          <h3>Purse: ${portfolio.user_budget.toFixed(2)}</h3>
-          <h4>Holdings:</h4>
-          <ul>
-            {Object.keys(portfolio.portfolio).length === 0 ? (
-              <li>None</li>
-            ) : (
-          Object.entries(portfolio.portfolio).map(([ticker, usdValue]) => (
-                <li key={ticker}>{ticker}: ${usdValue.toFixed(2)}</li>
-              ))
-            )}
-          </ul>
-        </div>
+    {/* Bottom Section: Full-Width, Same as Chart */}
+{/* Bottom Section: Full-Width, Same as Chart */}
+<div className="bottom-container">
+  <div className="bottom-columns">
+
+    {/* Left Column: Wallet Info */}
+    <div className="wallet-container">
+      <div className="balance">
+        <h3>Balance</h3>
+        <p>${portfolio.user_budget.toFixed(2)}</p>
       </div>
-      
-      {/* Right Column: Buy/Sell & Reset Portfolio */}
-      <div className="right-column">
-        <div className="trading-box">
-          <h2 className="sidebar-title">BUY / SELL</h2>
-          <div className="balance">
-            <h3>Balance</h3>
-            <p>${portfolio.user_budget.toFixed(2)}</p>
-          </div>
-  
-          {/* Buy Section */}
-          <div className="trade-input">
-            <input 
-              type="number"
-              placeholder="Investment Amount (USD)"
-              value={buyAmount}
-              onChange={(e) => setBuyAmount(e.target.value)}
-            />
-            <button className="buy-button" onClick={handleBuy}>BUY</button>
-          </div>
-  
-          {/* Sell Section */}
-          <div className="trade-input">
-            <input 
-              type="number"
-              placeholder="Sell Amount (USD)"
-              value={sellAmount}
-              onChange={(e) => setSellAmount(e.target.value)}
-            />
-            <button className="sell-button" onClick={handleSell}>SELL</button>
-          </div>
-     </div>
-          {/* Reset Portfolio */}
+      <div className="wallet-info">
+        <h3>Holdings:</h3>
+        <ul>
+          {Object.keys(portfolio.portfolio).length === 0 ? (
+            <li>None</li>
+          ) : (
+            Object.entries(portfolio.portfolio).map(([ticker, usdValue]) => (
+              <li key={ticker}>{ticker}: ${usdValue.toFixed(2)}</li>
+            ))
+          )}
+        </ul>
+      </div>
+    </div>
+
+    {/* Right Column: Buy/Sell & Reset Portfolio */}
+    <div className="trading-container">
+      <div className="trading-box">
+        <h2 className="sidebar-title">BUY / SELL</h2>
+
+        {/* Buy Section */}
+        <div className="trade-input">
+          <input 
+            type="number"
+            placeholder="Investment Amount (USD)"
+            value={buyAmount}
+            onChange={(e) => setBuyAmount(e.target.value)}
+          />
+          <button className="buy-button" onClick={handleBuy}>BUY</button>
+        </div>
+
+        {/* Sell Section */}
+        <div className="trade-input">
+          <input 
+            type="number"
+            placeholder="Sell Amount (USD)"
+            value={sellAmount}
+            onChange={(e) => setSellAmount(e.target.value)}
+          />
+          <button className="sell-button" onClick={handleSell}>SELL</button>
+        </div>
+
+        {/* Reset Portfolio */}
+        <div className="reset-container">
           <button className="reset-button" onClick={handleReset}>RESET PORTFOLIO</button>
-          {message && <p className="status-message">{message}</p>}
         </div>
-        
       </div>
+    </div>
+
+  </div>
+
+  {/* Status Message */}
+  {message && <p className="status-message">{message}</p>}
+</div>
+
+
   
       {/* Status Message */}
 
