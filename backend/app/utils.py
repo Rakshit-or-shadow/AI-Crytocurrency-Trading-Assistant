@@ -11,7 +11,7 @@ from fastapi.responses import JSONResponse
 
 
 # Load API credentials from src/config.json
-config_path = os.path.join(os.path.dirname(__file__), "C:\\Users\\thegi\\OneDrive\\Desktop\\WINTER 2025\\stock-market-simulator\\backend\\app\\config.json")
+config_path = os.path.join(os.path.dirname(__file__), "/Users/anant_gupta/Documents/University of Alberta/HackED2025/stock-market-simulator/backend/app/config.json")
 
 with open(config_path) as config_file:
     config = json.load(config_file)

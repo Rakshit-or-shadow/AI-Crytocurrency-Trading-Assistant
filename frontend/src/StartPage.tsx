@@ -8,11 +8,11 @@ const StartPage: React.FC = () => {
 
   return (
     <div className="start-container">
-      <h1 className="title">Crypto Price Tracker</h1>
+      <h1 className="title">Crypto Trading Simulator</h1>
       <button className="play-button" onClick={() => navigate("/welcome")}>
-        Start Tracking
+        Start Trading
       </button>
-      <p className="credits">Developed by FailedInvestmentBankers</p>
+      <h4 className="credits">Developed by FailedInvestmentBankers - HackED_2025</h4>
     </div>
   );
 };
