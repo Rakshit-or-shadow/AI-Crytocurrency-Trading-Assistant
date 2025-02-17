@@ -4,9 +4,10 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts"
 
 const CompanyPage: React.FC = () => {
   const { crypto } = useParams<{ crypto: string }>(); // Get crypto name from URL
-  const [timeInterval, setTimeInterval] = useState(4000);
+  const [timeInterval] = useState(4000);  // 4 sec by default
   const [priceHistory, setPriceHistory] = useState<{ time: string; price: number }[]>([]);
   const [yAxisRange, setYAxisRange] = useState<[number, number] | undefined>(undefined);
+  const [message, setMessage] = useState(""); // For status messages
 
   useEffect(() => {
     const fetchPrice = async () => {
@@ -37,6 +38,42 @@ const CompanyPage: React.FC = () => {
     return () => clearInterval(interval); // Cleanup on unmount
   }, [crypto, timeInterval]);
 
+    // 1️⃣ Buy Crypto
+    const handleBuy = async () => {
+      try {
+        const response = await fetch(`http://localhost:8000/buy/${crypto}`, { method: "POST" });
+        const result = await response.json();
+        setMessage(result.message || "Buy order placed!");
+      } catch (error) {
+        console.error("Error buying:", error);
+        setMessage("Error placing buy order.");
+      }
+    };
+  
+    // 2️⃣ Sell Crypto
+    const handleSell = async () => {
+      try {
+        const response = await fetch(`http://localhost:8000/sell/${crypto}`, { method: "POST" });
+        const result = await response.json();
+        setMessage(result.message || "Sell order placed!");
+      } catch (error) {
+        console.error("Error selling:", error);
+        setMessage("Error placing sell order.");
+      }
+    };
+  
+    // 3️⃣ Reset Portfolio
+    const handleReset = async () => {
+      try {
+        const response = await fetch(`http://localhost:8000/reset`, { method: "POST" });
+        const result = await response.json();
+        setMessage(result.message || "Portfolio reset!");
+      } catch (error) {
+        console.error("Error resetting:", error);
+        setMessage("Error resetting portfolio.");
+      }
+    };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white p-6">
       <h1 className="crytoHeading">{crypto} Live Price</h1>
@@ -63,11 +100,18 @@ const CompanyPage: React.FC = () => {
           <Tooltip formatter={(value) => value.toFixed(2)} contentStyle={{ backgroundColor: "black", borderColor: "black" }} />
           <Line type="monotone" dataKey="price" stroke="#45ba8b" strokeWidth={2} dot={{ fill: "#ffffff" }} />
         </LineChart>
-
-        <button> BUY</button>
-        <button> SELL</button>
-        <button> STOP</button>
       </div>
+
+        {/* Buttons */}
+      <div className="button-container">
+        <button className="buy-button" onClick={handleBuy}>Buy</button>
+        <button className="sell-button" onClick={handleSell}>Sell</button>
+        <button className="reset-button" onClick={handleReset}>Reset</button>
+      </div>
+
+      {/* Status Message */}
+      {message && <p className="status-message">{message}</p>}
+
     </div>
   );
 };
