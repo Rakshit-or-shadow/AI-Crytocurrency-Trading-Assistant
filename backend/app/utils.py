@@ -164,9 +164,18 @@ def reset_portfolio():
 @app.get("/portfolio")
 def get_portfolio():
     """
-    Returns the current purse and portfolio holdings.
+    Returns the current purse and portfolio holdings in USD.
     """
-    return JSONResponse(content={"user_budget": user_budget, "portfolio": portfolio})
+    global user_budget, portfolio
 
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    # Update real-time value of holdings
+    holdings_value = {}
+    for crypto_ticker, amount in portfolio.items():
+        fetch_current_price(crypto_ticker)  # Get latest price
+        price = ticker_prices.get(crypto_ticker, 0.0)
+        holdings_value[crypto_ticker] = round(amount * price, 2)  # Convert to USD
+
+    return JSONResponse(content={
+        "user_budget": round(user_budget, 2),
+        "portfolio": holdings_value  # Now shows USD value instead of quantity
+    })
