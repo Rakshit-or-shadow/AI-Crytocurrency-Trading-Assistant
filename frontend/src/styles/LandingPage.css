@@ -22,6 +22,7 @@
     backdrop-filter: blur(20px);
     transform: scale(1.1);
     color: white;
+    margin-top: 150px;
 }
 
 /* Options grid remains the same */
