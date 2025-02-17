@@ -98,9 +98,9 @@ const CompanyPage: React.FC = () => {
       <div className="w-full max-w-4xl mt-6">
         <LineChart width={900} height={400} data={priceHistory}>
         <CartesianGrid strokeDasharray="3 3" stroke="gray" />
-          <XAxis dataKey="time" tick={{ fontSize: 12, fill: "black" }} stroke="black" />
-          <YAxis domain={yAxisRange ? yAxisRange : ["auto", "auto"]} tickFormatter={(value) => value.toFixed(2)} tick={{ fontSize: 12, fill: "black" }} stroke="black" />
-          <Tooltip formatter={(value) => value.toFixed(2)} contentStyle={{ backgroundColor: "black", borderColor: "black" }} />
+          <XAxis dataKey="time" tick={{ fontSize: 12, fill: "white" }} stroke="white" />
+          <YAxis domain={yAxisRange ? yAxisRange : ["auto", "auto"]} tickFormatter={(value) => value.toFixed(2)} tick={{ fontSize: 12, fill: "white" }} stroke="white" />
+          <Tooltip formatter={(value) => value.toFixed(2)} contentStyle={{ backgroundColor: "white", borderColor: "white" }} />
           <Line type="monotone" dataKey="price" stroke="#45ba8b" strokeWidth={2} dot={{ fill: "#ffffff" }} />
         </LineChart>
       </div>
