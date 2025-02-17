@@ -24,22 +24,38 @@
 
   
   .middle-column {
-    width: 70%;
-    justify-content: center;
-    text-align: center;
-  }
+    width: 100%; /* Take full width */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center everything inside */
+    position: relative; /* Ensures elements stay in place */
+    z-index: 1; /* Ensures it's above other elements */
+}
+
+
+.crypto-heading {
+  text-align: center; 
+  font-size: 2rem;
+  font-weight: bold;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px; /* Reduce gap below */
+}
+
+
+
   
-  .cryptoHeading {
-    font-size: 48px;
-    margin-bottom: 10px;
-  }
-  
-  .chart-container {
-    width: 140%;
-    background: #1e1e1e;
-    padding: 15px;
-    border-radius: 10px;
-  }
+.chart-container {
+  width: 100%;
+  max-width: 900px; /* Prevent overflow */
+  background: #1e1e1e;
+  padding: 15px;
+  border-radius: 10px;
+  position: relative; /* Keeps it in place */
+}
+
   
 /* Container for left and right columns */
 .bottom-columns {
@@ -152,10 +168,13 @@
 
 /* Wallet Section (Left) */
 .wallet-container {
-    width: 48%;
-    padding: 20px;
-    background: #252525;
-    border-radius: 10px;
+  width: 48%;
+  padding: 15px;
+  background: transparent; /* Remove shared background */
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* Trading Section (Right) */
@@ -166,10 +185,39 @@
     border-radius: 10px;
 }
 
-/* Styling for Wallet Info */
-.wallet-info {
-    color: white;
-    font-size: 16px;
+wallet-info {
+  text-align: center;
+  background: rgba(69, 186, 139, 0.15); /* Same slight green shade as Balance */
+  padding: 10px;
+  border-radius: 8px;
+  width: 100%;
+}
+
+/* Holdings Title */
+.wallet-info h3 {
+  font-size: 16px;
+  font-weight: bold;
+  color: #ffffff;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+/* Holdings List */
+.wallet-info ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.wallet-info li {
+  font-size: 14px;
+  color: #e0e0e0;
+  padding: 5px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.wallet-info li:last-child {
+  border-bottom: none;
 }
 
 /* Styling for Buy/Sell Box */
@@ -181,10 +229,18 @@
 }
 
 /* Balance Text */
+/* Balance Styling */
 .balance {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #ffffff;
+  text-align: center;
+  padding: 10px;
+  background: rgba(69, 186, 139, 0.15); /* Subtle individual green shade */
+  border-radius: 8px;
+  width: 100%;
+  box-shadow: 0 0 6px rgba(69, 186, 139, 0.2); /* Soft glow */
+  margin-bottom: 10px; /* Add spacing to separate it from Holdings */
 }
 
 /* Trade Input Boxes */
@@ -219,15 +275,26 @@
     background-color: transparent;
 }
 
-.reset-button:hover{
-    border: 2px solid #45ba8b;
-    background-color: transparent;
+.reset-button {
+  width: auto;
+  padding: 8px 18px;
+  border: 2px solid #45ba8b;  /* Light green border */
+  background-color: transparent; /* Matches the background */
+  color: white; /* White text */
+  border-radius: 10px; /* Rounded corners */
+  font-size: 14px; /* Decreased font size */
+  font-weight: normal; /* No bold */
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
-.reset-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 15px;
+
+.reset-button:hover {
+  background-color: transparent; /* Keep it transparent on hover */
+  border: 2px solid #45ba8b; /* Keep border green */
+  color: white;
 }
+
+
 
 
 h3{
@@ -240,6 +307,81 @@ h3{
     flex-direction: row;
 }
 
-.left-container{
-    height: 100vh;
+/* Styling for the Statistical Analysis Panel */
+/* Styling for the Statistical Analysis Panel */
+.left-container {
+  width: 280px;  /* Keep compact size */
+  position: absolute;
+  top: 60px; /* Move higher to align with chart */
+  left: 20px; /* Adjust left positioning */
+  background: rgba(20, 20, 20, 0.9); /* Darker background, less glow */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 8px rgba(255, 255, 255, 0.2); /* Subtle white glow */
+  font-family: 'Orbitron', sans-serif; /* Futuristic font */
+  color: white; /* Default text color */
 }
+
+/* Header Styling */
+.left-container h2 {
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: white; /* White heading */
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* List Items */
+.left-container ul {
+  list-style: none;
+  padding: 0;
+}
+
+.left-container li {
+  font-size: 1rem;
+  margin: 8px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 5px;
+  color: white; /* Default text color */
+}
+
+/* High & Low Values (Always Green) */
+.high-value, .low-value {
+  color: limegreen;
+}
+
+/* Price Change: Green if positive, Red if negative */
+.price-change-positive {
+  color: limegreen;
+}
+.price-change-negative {
+  color: red;
+}
+
+/* Market Status: Green for Stable, Red for High Volatility */
+.market-status-green {
+  color: limegreen;
+  font-weight: bold;
+}
+.market-status-red {
+  color: red;
+  font-weight: bold;
+}
+
+/* Boundary Glow */
+.left-container {
+  position: absolute;
+  top: 100px; /* Move it slightly down */
+  left: 20px; /* Adjust positioning */
+  width: 280px; /* Keep it compact */
+  background: rgba(20, 20, 20, 0.9);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 8px rgba(255, 255, 255, 0.2);
+}
+
