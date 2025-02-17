@@ -100,28 +100,51 @@ button:hover {
     }
 }
 
-/* Main Container: Arrange into 3 Equal Columns */
 /* Fix the Main Container */
 .main-container {
     display: flex;
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
     justify-content: space-between;
-    align-items: center; /* Center everything vertically */
+    align-items: center;
     width: 100%;
     max-width: 1400px;
     margin: 0 auto;
     padding: 20px;
-    height: 100vh; /* Ensure it takes the full height */
+    /* Remove fixed height to let content dictate size */
 }
+
 /* Left Column: Wallet Info */
 .left-column {
     width: 20%;
+    min-width: 200px;  /* Ensure a minimum width */
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    justify-content: center; /* Center it vertically */
-    height: 100%;
+    justify-content: center;
+    margin: 10px 0;
 }
 
+/* Middle Column: Graph */
+.middle-column {
+    width: 60%;
+    min-width: 300px;  /* Ensure a minimum width */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 10px 0;
+}
+
+/* Right Column: Buy/Sell & Reset */
+.right-column {
+    width: 20%;
+    min-width: 200px;  /* Ensure a minimum width */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    margin: 10px 0; /* Removed margin-right to avoid overflow */
+}
 /* Fix Wallet Info Box */
 .wallet-info {
     background: rgba(255, 255, 255, 0.15);
@@ -135,14 +158,6 @@ button:hover {
     margin-left: 20px; /* Push it away from the left edge */
 }
 
-/* Middle Column: Graph */
-.middle-column {
-    width: 60%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center; /* Center graph in the middle */
-}
 /* Fix Graph Container */
 .chart-container {
     background: rgba(20, 20, 20, 0.95);
@@ -153,16 +168,6 @@ button:hover {
     backdrop-filter: blur(15px);
     color: white;
     width: 100%; /* Ensures the graph takes full width */
-}
-/* Right Column: Buy/Sell & Reset */
-.right-column {
-    width: 20%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    justify-content: center; /* Center it vertically */
-    height: 100%;
-    margin-right: 20px; /* Push it away from the right edge */
 }
 
 /* Fix Trading Box (Buy/Sell Section) */
