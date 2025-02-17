@@ -70,40 +70,58 @@ const CompanyPage: React.FC = () => {
     const priceInterval = setInterval(fetchPrice, timeInterval);
     return () => clearInterval(priceInterval); // Cleanup on unmount
   }, [cryptoParam, timeInterval]);
+  
+  // 1️⃣ Buy Crypto with Money
+  // filepath: /c:/Users/raksh/OneDrive/Documents/stock-market-simulator/frontend/src/CompanyPage.tsx
+const handleBuy = async () => {
+  const trimmedAmount = buyAmount.trim();
+  const money = parseFloat(trimmedAmount);
+  if (!trimmedAmount || isNaN(money) || money <= 0) {
+    setMessage("Please enter a valid investment amount.");
+    return;
+  }
+  const currentPrice =
+    priceHistory.length > 0 ? priceHistory[priceHistory.length - 1].price : null;
+  if (!currentPrice) {
+    setMessage("Current price unavailable. Try again.");
+    return;
+  }
+  try {
+    const response = await fetch(`http://localhost:8000/buy/${cryptoParam}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ money: money }),
+    });
+    const result = await response.json();
+    setMessage(result.message || "Buy order placed!");
+  } catch (error) {
+    console.error("Error buying:", error);
+    setMessage("Error placing buy order.");
+  }
+};
 
-  // 1️⃣ Buy Crypto
-  const handleBuy = async () => {
-    const amount = parseFloat(buyAmount);
-    if (!buyAmount || isNaN(amount) || amount <= 0) {
-      setMessage("Please enter a valid buy amount.");
-      return;
-    }
-    try {
-      const response = await fetch(`http://localhost:8000/buy/${cryptoParam}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: buyAmount }),
-      });
-      const result = await response.json();
-      setMessage(result.message || "Buy order placed!");
-    } catch (error) {
-      console.error("Error buying:", error);
-      setMessage("Error placing buy order.");
-    }
-  };
-
-  // 2️⃣ Sell Crypto
+  // 2️⃣ Sell Crypto with Money
   const handleSell = async () => {
-    const amount = parseFloat(sellAmount);
-    if (!sellAmount || isNaN(amount) || amount <= 0) {
-      setMessage("Please enter a valid sell amount.");
+    const trimmedSell = sellAmount.trim();
+    const moneyToSell = parseFloat(trimmedSell);
+    if (!trimmedSell || isNaN(moneyToSell) || moneyToSell <= 0) {
+      setMessage("Please enter a valid sell amount (in USD).");
       return;
     }
+    const currentPrice =
+      priceHistory.length > 0 ? priceHistory[priceHistory.length - 1].price : null;
+    if (!currentPrice) {
+      setMessage("Current price unavailable. Try again.");
+      return;
+    }
+    // Convert the USD amount to crypto quantity
+    const coinQtyToSell = moneyToSell / currentPrice;
     try {
       const response = await fetch(`http://localhost:8000/sell/${cryptoParam}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: sellAmount }),
+        // Send the calculated coin quantity for the sell order
+        body: JSON.stringify({ amount: coinQtyToSell }),
       });
       const result = await response.json();
       setMessage(result.message || "Sell order placed!");
@@ -116,15 +134,20 @@ const CompanyPage: React.FC = () => {
   // 3️⃣ Reset Portfolio
   const handleReset = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/reset`, { method: "POST" });
+      const response = await fetch("http://localhost:8000/reset", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
       const result = await response.json();
       setMessage(result.message || "Portfolio reset!");
+      setPortfolio({ user_budget: 250000, portfolio: {} });
     } catch (error) {
-      console.error("Error resetting:", error);
+      console.error("Error resetting portfolio:", error);
       setMessage("Error resetting portfolio.");
     }
   };
 
+  // ...existing JSX...
   return (
     <div className="main-container">
       
@@ -172,7 +195,7 @@ const CompanyPage: React.FC = () => {
           <div className="trade-input">
             <input 
               type="number"
-              placeholder="Amount to Buy"
+              placeholder="Investment Amount (USD)"
               value={buyAmount}
               onChange={(e) => setBuyAmount(e.target.value)}
             />
@@ -183,7 +206,7 @@ const CompanyPage: React.FC = () => {
           <div className="trade-input">
             <input 
               type="number"
-              placeholder="Amount to Sell"
+              placeholder="Sell Amount (USD)"
               value={sellAmount}
               onChange={(e) => setSellAmount(e.target.value)}
             />

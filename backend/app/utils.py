@@ -77,18 +77,18 @@ portfolio = {}        # Holdings, keyed by crypto ticker
 @app.post("/buy/{crypto}")
 async def buy_crypto(crypto: str, request: Request):
     """
-    Buys a specified amount of crypto.
-    Expects JSON: {"amount": <amount_to_buy>}
+    Buys crypto for a specified amount of money.
+    Expects JSON: {"money": <investment_amount_in_usd>}
     """
     global user_budget, portfolio
     try:
         data = await request.json()
-        amount = float(data.get("amount", 0))
+        money = float(data.get("money", 0))
     except Exception as e:
         return JSONResponse(content={"message": "Invalid JSON payload."})
     
-    if amount <= 0:
-        return JSONResponse(content={"message": "Invalid amount to buy."})
+    if money <= 0:
+        return JSONResponse(content={"message": "Invalid money amount to invest."})
     
     crypto_name = crypto.title()
     crypto_ticker = crypto_mapping.get(crypto_name, crypto.upper())
@@ -97,19 +97,16 @@ async def buy_crypto(crypto: str, request: Request):
     if price <= 0:
         return JSONResponse(content={"message": "Price data unavailable."})
     
-    cost = price * amount
-    if cost > user_budget:
+    # Calculate coin quantity based on money provided
+    coinQty = money / price
+    if money > user_budget:
         return JSONResponse(content={"message": "Insufficient funds."})
     
     # Update user's purse and holdings
-    user_budget -= cost
-    portfolio[crypto_ticker] = portfolio.get(crypto_ticker, 0) + amount
-    
-    return JSONResponse(content={
-        "message": f"Bought {amount} {crypto_ticker} for ${cost:.2f}.",
-        "user_budget": user_budget,
-        "portfolio": portfolio,
-    })
+    user_budget -= money
+    portfolio[crypto_ticker] = portfolio.get(crypto_ticker, 0) + coinQty
+
+    return JSONResponse(content={"message": f"Bought {coinQty:.4f} {crypto_ticker} for ${money:.2f}."})
 
 @app.post("/sell/{crypto}")
 async def sell_crypto(crypto: str, request: Request):
