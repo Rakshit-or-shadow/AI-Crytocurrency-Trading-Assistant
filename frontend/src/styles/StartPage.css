@@ -15,9 +15,9 @@
   /* margin-top: 50px; Pushes title slightly down from the top */
 }
 
-.play-button {
-  font-size: 1.5rem; /* Increase button text size */
-  padding: 15px 40px; /* Increase button size */
+/* .play-button {
+  font-size: 1.5rem; 
+  padding: 15px 40px;
   background-color: #4caf50;
   color: white;
   border: none;
@@ -25,12 +25,11 @@
   cursor: pointer;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
   transition: background-color 0.3s;
-}
-
+} */
   
-  .play-button:hover {
+/* .play-button:hover {
     background-color: #45a049;
-  }
+  } */
   
 
 .credits {

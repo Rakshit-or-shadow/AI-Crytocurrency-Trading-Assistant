@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
+import "./styles/CompanyPage.css"; 
+import "./styles/main.css";
 
 const CompanyPage: React.FC = () => {
   const { crypto } = useParams<{ crypto: string }>(); // Get crypto name from URL
@@ -75,6 +77,7 @@ const CompanyPage: React.FC = () => {
     };
 
   return (
+    <div className="graph-container">
     <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white p-6">
       <h1 className="crytoHeading">{crypto} Live Price</h1>
 
@@ -95,9 +98,9 @@ const CompanyPage: React.FC = () => {
       <div className="w-full max-w-4xl mt-6">
         <LineChart width={900} height={400} data={priceHistory}>
         <CartesianGrid strokeDasharray="3 3" stroke="gray" />
-          <XAxis dataKey="time" tick={{ fontSize: 12, fill: "black" }} stroke="black" />
-          <YAxis domain={yAxisRange ? yAxisRange : ["auto", "auto"]} tickFormatter={(value) => value.toFixed(2)} tick={{ fontSize: 12, fill: "black" }} stroke="black" />
-          <Tooltip formatter={(value) => value.toFixed(2)} contentStyle={{ backgroundColor: "black", borderColor: "black" }} />
+          <XAxis dataKey="time" tick={{ fontSize: 12, fill: "white" }} stroke="white" />
+          <YAxis domain={yAxisRange ? yAxisRange : ["auto", "auto"]} tickFormatter={(value) => value.toFixed(2)} tick={{ fontSize: 12, fill: "white" }} stroke="white" />
+          <Tooltip formatter={(value) => value.toFixed(2)} contentStyle={{ backgroundColor: "white", borderColor: "white" }} />
           <Line type="monotone" dataKey="price" stroke="#45ba8b" strokeWidth={2} dot={{ fill: "#ffffff" }} />
         </LineChart>
       </div>
@@ -112,6 +115,7 @@ const CompanyPage: React.FC = () => {
       {/* Status Message */}
       {message && <p className="status-message">{message}</p>}
 
+    </div>
     </div>
   );
 };
