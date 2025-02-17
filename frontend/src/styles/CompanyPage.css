@@ -109,3 +109,125 @@ gap: 30px;}
         grid-template-columns: repeat(1, 1fr) !important; /* 1 column for very small screens */
     }
 }
+
+/* Main Container: Arrange into 3 Equal Columns */
+.main-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    height: 100vh; /* Ensures full height */
+}
+
+/* Left Column: Wallet Info */
+.left-column {
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+/* Fix Wallet Info Box */
+.wallet-info {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 14px;
+    border-radius: 10px;
+    color: white;
+    min-width: 250px;
+    font-size: 14px;
+    box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    margin-top: 20px; /* Ensures correct positioning */
+}
+
+/* Middle Column: Graph */
+.middle-column {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Fix Graph Container */
+.chart-container {
+    background: rgba(20, 20, 20, 0.95);
+    padding: 30px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0px 6px 15px rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    color: white;
+    width: 100%; /* Ensures the graph takes full width */
+}
+
+/* Right Column: Buy/Sell & Reset */
+.right-column {
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+/* Fix Trading Box (Buy/Sell Section) */
+.trading-box {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(10px);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px; /* Prevents overlap */
+}
+
+/* Fix Input Boxes for Buy/Sell */
+.trade-input {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* Fix Input Fields */
+.trade-input input {
+    flex: 1;
+    padding: 8px;
+    background: #1c1c1c;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: white;
+    border-radius: 6px;
+    text-align: center;
+}
+
+/* Fix Button Alignment */
+.buy-button, .sell-button, .reset-button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.buy-button {
+    background-color: #4caf50;
+    color: white;
+}
+
+.sell-button {
+    background-color: #f44336;
+    color: white;
+}
+
+.reset-button {
+    background-color: #ff9800;
+    color: white;
+}

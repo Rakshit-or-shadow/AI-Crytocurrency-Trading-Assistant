@@ -126,38 +126,30 @@ const CompanyPage: React.FC = () => {
   };
 
   return (
-    <div className="graph-container" style={{ position: "relative" }}>
-      {/* Top-right purse and holdings box */}
-      <div style={{
-        position: "absolute",
-        top: 20,
-        right: 20,
-        background: "rgba(255, 255, 255, 0.9)",
-        color: "black",
-        padding: "10px",
-        borderRadius: "8px",
-        textAlign: "left",
-        minWidth: "200px"
-      }}>
-        <h3>Purse: ${portfolio.user_budget.toFixed(2)}</h3>
-        <h4>Holdings:</h4>
-        <ul>
-          {Object.keys(portfolio.portfolio).length === 0 ? (
-            <li>None</li>
-          ) : (
-            Object.entries(portfolio.portfolio).map(([ticker, amt]) => (
-              <li key={ticker}>{ticker}: {amt as number}</li>
-            ))
-          )}
-        </ul>
-      </div>
+    <div className="main-container">
       
-      <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white p-6">
-        <h1 className="crytoHeading">{cryptoParam} Live Price</h1>
-
-        {/* Live Price Graph */}
-        <div className="w-full max-w-4xl mt-6">
-          <LineChart width={900} height={400} data={priceHistory}>
+      {/* Left Column: Wallet Info (Purse & Holdings) */}
+      <div className="left-column">
+        <div className="wallet-info">
+          <h3>Purse: ${portfolio.user_budget.toFixed(2)}</h3>
+          <h4>Holdings:</h4>
+          <ul>
+            {Object.keys(portfolio.portfolio).length === 0 ? (
+              <li>None</li>
+            ) : (
+              Object.entries(portfolio.portfolio).map(([ticker, amt]) => (
+                <li key={ticker}>{ticker}: {amt as number}</li>
+              ))
+            )}
+          </ul>
+        </div>
+      </div>
+  
+      {/* Middle Column: Graph (UNCHANGED) */}
+      <div className="middle-column">
+        <h1 className="cryptoHeading">{cryptoParam} Live Price</h1>
+        <div className="chart-container">
+        <LineChart width={900} height={400} data={priceHistory}>
             <CartesianGrid strokeDasharray="3 3" stroke="gray" />
             <XAxis dataKey="time" tick={{ fontSize: 12, fill: "white" }} stroke="white" />
             <YAxis domain={yAxisRange ? yAxisRange : ["auto", "auto"]} tickFormatter={(value) => value.toFixed(2)} tick={{ fontSize: 12, fill: "white" }} stroke="white" />
@@ -165,37 +157,50 @@ const CompanyPage: React.FC = () => {
             <Line type="monotone" dataKey="price" stroke="#45ba8b" strokeWidth={2} dot={{ fill: "#ffffff" }} />
           </LineChart>
         </div>
-
-        {/* Trading Panel */}
-        <div className="button-container" style={{ flexDirection: "column", gap: "10px", marginTop: "20px" }}>
-          <div>
-            <input
+      </div>
+  
+      {/* Right Column: Buy/Sell & Reset Portfolio */}
+      <div className="right-column">
+        <div className="trading-box">
+          <h2 className="sidebar-title">BUY / SELL</h2>
+          <div className="balance">
+            <h3>Balance</h3>
+            <p>${portfolio.user_budget.toFixed(2)}</p>
+          </div>
+  
+          {/* Buy Section */}
+          <div className="trade-input">
+            <input 
               type="number"
               placeholder="Amount to Buy"
               value={buyAmount}
               onChange={(e) => setBuyAmount(e.target.value)}
-              style={{ marginRight: "10px", padding: "8px" }}
             />
-            <button className="buy-button" onClick={handleBuy}>Buy</button>
+            <button className="buy-button" onClick={handleBuy}>BUY</button>
           </div>
-          <div>
-            <input
+  
+          {/* Sell Section */}
+          <div className="trade-input">
+            <input 
               type="number"
               placeholder="Amount to Sell"
               value={sellAmount}
               onChange={(e) => setSellAmount(e.target.value)}
-              style={{ marginRight: "10px", padding: "8px" }}
             />
-            <button className="sell-button" onClick={handleSell}>Sell</button>
+            <button className="sell-button" onClick={handleSell}>SELL</button>
           </div>
-          <button className="reset-button" onClick={handleReset}>Reset Portfolio</button>
+  
+          {/* Reset Portfolio */}
+          <button className="reset-button" onClick={handleReset}>RESET PORTFOLIO</button>
         </div>
-
-        {/* Status Message */}
-        {message && <p className="status-message">{message}</p>}
       </div>
+  
+      {/* Status Message */}
+      {message && <p className="status-message">{message}</p>}
     </div>
   );
+  
+  ;
 };
 
 export default CompanyPage;
