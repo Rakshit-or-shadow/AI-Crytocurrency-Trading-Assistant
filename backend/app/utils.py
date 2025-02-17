@@ -11,7 +11,7 @@ from fastapi.responses import JSONResponse
 
 
 # Load API credentials from src/config.json
-config_path = os.path.join(os.path.dirname(__file__), "/Users/anant_gupta/Documents/University of Alberta/HackED2025/stock-market-simulator/backend/app/config.json")
+config_path = os.path.join(os.path.dirname(__file__), "C:\\Users\\thegi\\OneDrive\\Desktop\\WINTER 2025\\stock-market-simulator\\backend\\app\\config.json")
 
 with open(config_path) as config_file:
     config = json.load(config_file)
@@ -33,30 +33,47 @@ app.add_middleware(
 # Initialize Coinbase API client
 client = Client(api_key, api_secret)
 
-# Store the latest price in a global variable
-current_price = {"price": None}
+# Initialize Coinbase API client
+client = Client(api_key, api_secret)
 
-def fetch_current_price():
-    """Continuously fetches the latest price from Coinbase API and updates the global variable."""
-    global current_price
-    while True:
-        try:
-            ticker = client.get_spot_price(currency_pair="BTC-USD")  # Fetch Bitcoin price in USD
-            current_price["price"] = float(ticker["amount"])
-            print(f"Updated price: {current_price['price']}")  # Debugging
-            print(f"Prices {current_price}")
-        except Exception as e:
-            print(f"Error fetching price: {e}")
-        time.sleep(1)  # Update every second
+# Mapping of common cryptocurrency names to ticker symbols
+crypto_mapping = {
+    "Bitcoin": "BTC",
+    "Ethereum": "ETH",
+    "Solana": "SOL",
+    "Ripple": "XRP",
+    "Cardano": "ADA",
+    "Dogecoin": "DOGE",
+    "Polygon": "MATIC",
+    "Litecoin": "LTC",
+    "Polkadot": "DOT",
+    "Bitcoin Cash": "BCH"
+}
 
-@app.get("/price")
-def get_price():
-    """Returns the latest cryptocurrency price."""
-    return JSONResponse(content={"price" : current_price.get("price", 0.0)})
+# Store latest prices in a dictionary
+ticker_prices = {}
 
-# Start the background thread for price updates
-thread = threading.Thread(target=fetch_current_price, daemon=True)
-thread.start()
-2
+def fetch_current_price(crypto: str):
+    """Fetches the latest price from Coinbase API for the given cryptocurrency."""
+    global ticker_prices
+    try:
+        ticker = client.get_spot_price(currency_pair=f"{crypto}-USD")  # Fetch price in USD
+        ticker_prices[crypto] = float(ticker["amount"])
+        print(f"Updated {crypto} price: {ticker_prices[crypto]}")
+    except Exception as e:
+        print(f"Error fetching {crypto} price: {e}")
+
+@app.get("/price/{crypto_name}")
+def get_price(crypto_name: str):
+    """Converts crypto name to ticker and returns the latest price."""
+    crypto_name = crypto_name.title()  # Capitalize properly for lookup
+    crypto_ticker = crypto_mapping.get(crypto_name, crypto_name.upper())
+    
+    # Always fetch fresh data instead of relying on stored values
+    fetch_current_price(crypto_ticker)
+    
+    return JSONResponse(content={"price": ticker_prices.get(crypto_ticker, 0.0)})
+
+
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
