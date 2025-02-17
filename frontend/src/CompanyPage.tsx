@@ -164,6 +164,10 @@ const handleBuy = async () => {
     fetchStatisticalAnalysis();
   }, [cryptoParam]);
 
+  const [showAITrading, setShowAITrading] = useState(false);
+
+
+
   // ...existing JSX...
   return (
     <div className="main-container">
@@ -203,6 +207,8 @@ const handleBuy = async () => {
     <p>Loading...</p>
   )}
 </div>
+
+
 
 
       <div className="right-container">
@@ -284,11 +290,24 @@ const handleBuy = async () => {
   {/* Status Message */}
   {message && <p className="status-message">{message}</p>}
 </div>
-<TradingGraph></TradingGraph>
+{showAITrading && (
+  <div className="ai-trading-section">
+    <TradingGraph />
+  </div>
+)}
+<button className="toggle-ai-trading-button" onClick={() => setShowAITrading(!showAITrading)}>
+  {showAITrading ? "Hide AI Trading" : "Watch the AI bot trade "}
+</button>
 </div>
 
     </div>
-  );
+    
+  )
+  
+  
+  ;
+
+
   
   ;
 };
