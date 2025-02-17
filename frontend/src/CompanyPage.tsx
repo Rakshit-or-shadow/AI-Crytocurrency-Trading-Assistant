@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
+import "./styles/CompanyPage.css"; 
+import "./styles/main.css";
 
 const CompanyPage: React.FC = () => {
   const { crypto } = useParams<{ crypto: string }>(); // Get crypto name from URL
@@ -75,6 +77,7 @@ const CompanyPage: React.FC = () => {
     };
 
   return (
+    <div className="graph-container">
     <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white p-6">
       <h1 className="crytoHeading">{crypto} Live Price</h1>
 
@@ -112,6 +115,7 @@ const CompanyPage: React.FC = () => {
       {/* Status Message */}
       {message && <p className="status-message">{message}</p>}
 
+    </div>
     </div>
   );
 };
