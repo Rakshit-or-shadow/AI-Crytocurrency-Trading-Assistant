@@ -191,20 +191,62 @@ class AITrader:
     def stop(self):
         self.running = False
 
-# Example usage:
 if __name__ == "__main__":
-    with open('config.json') as config_file:
+    import os
+    import sys
+    import json
+    import threading
+
+    # Add the parent directory to sys.path so utils.py can be found
+    sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+    from utils import crypto_mapping
+
+    # Construct an absolute path to config.json located in backend/app
+    config_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "config.json"))
+    print(f"Looking for config at: {config_path}")
+    with open(config_path) as config_file:
         config = json.load(config_file)
-    trader = AITrader(api_key=config['api_key'], api_secret=config['api_secret'], trading_pair=config['trading_pair'])
 
-    trader.fetch_historical_data()  # Fetch historical data for the past 24 hours
+    # Print available cryptocurrencies from crypto_mapping
+    print("Available cryptocurrencies:")
+    for coin, ticker in crypto_mapping.items():
+        print(f"{coin}: {ticker}-USD")
 
-    trade_thread = threading.Thread(target=trader.trade)
-    trade_thread.start()
+    # Ask user to choose a cryptocurrency
+    user_input = input("Enter the coin you want to trade (e.g., BTC, Bitcoin, DOGE): ").strip()
 
-    try:
-        trader.plot_price_history()
-        trader.plot_trade_actions()
-    except KeyboardInterrupt:
-        trader.stop()
-        trade_thread.join()
+    selected_ticker = None
+    # Try to match using ticker (e.g., BTC)
+    if user_input.upper() in crypto_mapping.values():
+        selected_ticker = user_input.upper()
+    # Try to match using coin name (e.g., Bitcoin)
+    elif user_input.title() in crypto_mapping:
+        selected_ticker = crypto_mapping[user_input.title()]
+    # If user includes "-USD", remove it and check again (e.g., DOGE-USD)
+    elif user_input.upper().endswith("-USD"):
+        ticker_candidate = user_input.upper().replace("-USD", "")
+        if ticker_candidate in crypto_mapping.values():
+            selected_ticker = ticker_candidate
+
+    if selected_ticker:
+        trading_pair = f"{selected_ticker}-USD"
+        print(f"Starting trader for {trading_pair}")
+        
+        trader = AITrader(
+            api_key=config['api_key'],
+            api_secret=config['api_secret'],
+            trading_pair=trading_pair
+        )
+
+        t = threading.Thread(target=trader.trade)
+        t.start()
+
+        # Optionally, start plotting price history and trade actions
+        try:
+            trader.plot_price_history()
+            trader.plot_trade_actions()
+        except KeyboardInterrupt:
+            trader.stop()
+            t.join()
+    else:
+        print("Invalid cryptocurrency selection.")
