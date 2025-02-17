@@ -101,23 +101,25 @@ button:hover {
 }
 
 /* Main Container: Arrange into 3 Equal Columns */
+/* Fix the Main Container */
 .main-container {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center; /* Center everything vertically */
     width: 100%;
     max-width: 1400px;
     margin: 0 auto;
     padding: 20px;
-    height: 100vh; /* Ensures full height */
+    height: 100vh; /* Ensure it takes the full height */
 }
-
 /* Left Column: Wallet Info */
 .left-column {
     width: 20%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    justify-content: center; /* Center it vertically */
+    height: 100%;
 }
 
 /* Fix Wallet Info Box */
@@ -130,7 +132,7 @@ button:hover {
     font-size: 14px;
     box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
     border: 1px solid rgba(255, 255, 255, 0.3);
-    margin-top: 20px; /* Ensures correct positioning */
+    margin-left: 20px; /* Push it away from the left edge */
 }
 
 /* Middle Column: Graph */
@@ -139,9 +141,8 @@ button:hover {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: center; /* Center graph in the middle */
 }
-
 /* Fix Graph Container */
 .chart-container {
     background: rgba(20, 20, 20, 0.95);
@@ -153,18 +154,19 @@ button:hover {
     color: white;
     width: 100%; /* Ensures the graph takes full width */
 }
-
 /* Right Column: Buy/Sell & Reset */
 .right-column {
     width: 20%;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+    justify-content: center; /* Center it vertically */
+    height: 100%;
+    margin-right: 20px; /* Push it away from the right edge */
 }
 
 /* Fix Trading Box (Buy/Sell Section) */
 .trading-box {
-    width: 100%;
     background: rgba(255, 255, 255, 0.08);
     padding: 20px;
     border-radius: 8px;
