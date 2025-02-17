@@ -1,230 +1,129 @@
-.company-container {
-    text-align: center;
-    background-color: #f6f2df;
-    color: #000000;
-    padding: 20px;
-    border-radius: 10px;
-    border: 2px solid #58b785;
-    max-width: 1000px;
-    margin: auto;
-}
-
-.company-list {
-    display: grid !important;
-    grid-template-columns: repeat(5, 1fr) !important; /* Ensures exactly 5 columns */
-    gap: 20px;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-}
-
-.company-box {
-    width: 100%;
-    padding: 15px;
-    border: 2px solid #58b785;
-    background-color: #f6f2df;
-    color: #000000;
-    text-align: center;
-    border-radius: 10px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.button-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-    margin-top: 20px;
-}
-
-.button-container button {
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    border-radius: 5px;
-    transition: 0.3s;
-    text-align: center;
-}
-
-.buy-button {
-    background-color: #4caf50;
-    color: white;
-}
-
-.sell-button {
-    background-color: #f44336;
-    color: white;
-}
-
-.reset-button {
-    background-color: #ff9800;
-    color: white;
-}
-
-button:hover {
-    opacity: 0.8;
-}
-
-/* Graph container for displaying graphs with a dark theme */
-.graph-container {
-    text-align: center;
-    width: 90%;
-    max-width: 1000px;
-    background: rgba(20, 20, 20, 0.85);
-    padding: 60px;
-    border-radius: 20px;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(20px);
-    transform: scale(1.1); /* Scales up the box */
-    color: white;
-}
-
-/* Responsive Adjustments */
-@media (max-width: 900px) {
-    .company-list {
-        grid-template-columns: repeat(3, 1fr) !important; /* 3 columns for medium screens */
-    }
-}
-
-@media (max-width: 600px) {
-    .company-list {
-        grid-template-columns: repeat(2, 1fr) !important; /* 2 columns for smaller screens */
-    }
-}
-
-@media (max-width: 400px) {
-    .company-list {
-        grid-template-columns: repeat(1, 1fr) !important; /* 1 column for very small screens */
-    }
-}
-
-/* Fix the Main Container */
+/* General layout */
 .main-container {
     display: flex;
-    flex-wrap: wrap; /* Allow wrapping on smaller screens */
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center; /* Center everything */
     width: 100%;
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 20px;
-    /* Remove fixed height to let content dictate size */
-}
-
-/* Left Column: Wallet Info */
-.left-column {
-    width: 20%;
-    min-width: 200px;  /* Ensure a minimum width */
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    margin: 10px 0;
-}
-
-/* Middle Column: Graph */
-.middle-column {
-    width: 60%;
-    min-width: 300px;  /* Ensure a minimum width */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin: 10px 0;
-}
-
-/* Right Column: Buy/Sell & Reset */
-.right-column {
-    width: 20%;
-    min-width: 200px;  /* Ensure a minimum width */
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    justify-content: center;
-    margin: 10px 0; /* Removed margin-right to avoid overflow */
-}
-/* Fix Wallet Info Box */
-.wallet-info {
-    background: rgba(255, 255, 255, 0.15);
-    padding: 14px;
-    border-radius: 10px;
-    color: white;
-    min-width: 250px;
-    font-size: 14px;
-    box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    margin-left: 20px; /* Push it away from the left edge */
-}
-
-/* Fix Graph Container */
-.chart-container {
-    background: rgba(20, 20, 20, 0.95);
-    padding: 30px;
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0px 6px 15px rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(15px);
-    color: white;
-    width: 100%; /* Ensures the graph takes full width */
-}
-
-/* Fix Trading Box (Buy/Sell Section) */
-.trading-box {
-    background: rgba(255, 255, 255, 0.08);
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.12);
-    backdrop-filter: blur(10px);
-    color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-    margin-top: 20px; /* Prevents overlap */
-}
-
-/* Fix Input Boxes for Buy/Sell */
-.trade-input {
+  }
+  
+  /* .wallet-info h3, .wallet-info h4 {
+    margin-bottom: 10px;
+  }
+  
+  .wallet-info ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .wallet-info li {
+    margin-bottom: 5px;
+  }
+   */
+  /* Middle Column - Chart */
+  .middle-column {
     width: 100%;
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-
-/* Fix Input Fields */
-.trade-input input {
-    flex: 1;
-    padding: 8px;
-    background: #1c1c1c;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    color: white;
-    border-radius: 6px;
     text-align: center;
-}
-
-/* Fix Button Alignment */
-.buy-button, .sell-button, .reset-button {
+  }
+  
+  .cryptoHeading {
+    font-size: 48px;
+    margin-bottom: 10px;
+  }
+  
+  .chart-container {
+    background: #1e1e1e;
+    padding: 15px;
+    border-radius: 10px;
+  }
+  
+/* Container for left and right columns */
+.bottom-columns {
+    display: flex;
+    justify-content:space-evenly; /* Push left and right to edges */
     width: 100%;
-    padding: 12px;
-    border-radius: 6px;
-    font-size: 15px;
-    font-weight: bold;
+    margin-top: 20px;
+  }
+  
+  /* Left & Right Columns */
+  .left-column,
+  .right-column {
+    padding: 20px;
+    background: #1e1e1e;
+    border-radius: 10px;
+    width: 25%; /* Adjust as needed */
+  }
+
+  .trading-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .sidebar-title {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+  
+  .balance {
+    text-align: center;
+    margin-bottom: 15px;
+  }
+  
+  .trade-input {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+  }
+  
+  .trade-input input {
+    padding: 8px;
+    margin-bottom: 5px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  /* Buttons */
+  .buy-button, .sell-button, .reset-button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
     cursor: pointer;
-}
-
-.buy-button {
-    background-color: #4caf50;
+    font-size: 16px;
     color: white;
-}
-
-.sell-button {
-    background-color: #f44336;
-    color: white;
-}
-
-.reset-button {
-    background-color: #ff9800;
-    color: white;
-}
+    margin-top: 5px;
+  }
+  
+  .buy-button {
+    background-color: #45ba8b;
+  }
+  
+  .sell-button {
+    background-color: #e74c3c;
+  }
+  
+  .reset-button {
+    background-color: #3498db;
+    margin-top: 15px;
+  }
+  
+  .buy-button:hover {
+    background-color: #3da17a;
+  }
+  
+  .sell-button:hover {
+    background-color: #c0392b;
+  }
+  
+  .reset-button:hover {
+    background-color: #2980b9;
+  }
+  
+  /* Status Message */
+  .status-message {
+    margin-top: 10px;
+    font-weight: bold;
+    text-align: center;
+  }
+  
