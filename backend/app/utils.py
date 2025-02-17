@@ -179,3 +179,6 @@ def get_portfolio():
         "user_budget": round(user_budget, 2),
         "portfolio": holdings_value  # Now shows USD value instead of quantity
     })
+    
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
