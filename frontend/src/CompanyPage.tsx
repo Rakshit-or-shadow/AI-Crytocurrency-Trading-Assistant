@@ -5,21 +5,52 @@ import "./styles/CompanyPage.css";
 import "./styles/main.css";
 
 const CompanyPage: React.FC = () => {
-  const { crypto } = useParams<{ crypto: string }>(); // Get crypto name from URL
+  const { crypto } = useParams<{ crypto: string }>();
+  // Use crypto parameter if available, else default to "Bitcoin"
+  const cryptoParam = crypto ? crypto : "Bitcoin";
+
   const [timeInterval] = useState(4000);  // 4 sec by default
   const [priceHistory, setPriceHistory] = useState<{ time: string; price: number }[]>([]);
   const [yAxisRange, setYAxisRange] = useState<[number, number] | undefined>(undefined);
   const [message, setMessage] = useState(""); // For status messages
 
+  // New States:
+  const [buyAmount, setBuyAmount] = useState("");
+  const [sellAmount, setSellAmount] = useState("");
+  const [portfolio, setPortfolio] = useState<{ user_budget: number; portfolio: { [key: string]: number } }>({
+    user_budget: 250000,
+    portfolio: {}
+  });
+
+  // Fetch current portfolio periodically (every 4 sec)
+  useEffect(() => {
+    const fetchPortfolio = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/portfolio");
+        const data = await response.json();
+        setPortfolio(data);
+      } catch (error) {
+        console.error("Error fetching portfolio:", error);
+      }
+    };
+    fetchPortfolio();
+    const portfolioInterval = setInterval(fetchPortfolio, 4000);
+    return () => clearInterval(portfolioInterval);
+  }, []);
+
+  // Fetch live price using the validated cryptoParam
   useEffect(() => {
     const fetchPrice = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/price/${crypto}`);
+        const response = await fetch(`http://localhost:8000/price/${cryptoParam}`);
         const data = await response.json();
         if (data.price !== null) {
           setPriceHistory((prev) => {
-            const updatedHistory = [...prev.slice(-20), { time: new Date().toLocaleTimeString(), price: data.price }];
-            
+            const updatedHistory = [
+              ...prev.slice(-20),
+              { time: new Date().toLocaleTimeString(), price: data.price }
+            ];
+
             // Set Y-axis range based on the first price received
             if (updatedHistory.length === 1) {
               const basePrice = data.price;
@@ -36,86 +67,133 @@ const CompanyPage: React.FC = () => {
     };
 
     fetchPrice(); // Initial fetch
-    const interval = setInterval(fetchPrice, timeInterval);
-    return () => clearInterval(interval); // Cleanup on unmount
-  }, [crypto, timeInterval]);
+    const priceInterval = setInterval(fetchPrice, timeInterval);
+    return () => clearInterval(priceInterval); // Cleanup on unmount
+  }, [cryptoParam, timeInterval]);
 
-    // 1️⃣ Buy Crypto
-    const handleBuy = async () => {
-      try {
-        const response = await fetch(`http://localhost:8000/buy/${crypto}`, { method: "POST" });
-        const result = await response.json();
-        setMessage(result.message || "Buy order placed!");
-      } catch (error) {
-        console.error("Error buying:", error);
-        setMessage("Error placing buy order.");
-      }
-    };
-  
-    // 2️⃣ Sell Crypto
-    const handleSell = async () => {
-      try {
-        const response = await fetch(`http://localhost:8000/sell/${crypto}`, { method: "POST" });
-        const result = await response.json();
-        setMessage(result.message || "Sell order placed!");
-      } catch (error) {
-        console.error("Error selling:", error);
-        setMessage("Error placing sell order.");
-      }
-    };
-  
-    // 3️⃣ Reset Portfolio
-    const handleReset = async () => {
-      try {
-        const response = await fetch(`http://localhost:8000/reset`, { method: "POST" });
-        const result = await response.json();
-        setMessage(result.message || "Portfolio reset!");
-      } catch (error) {
-        console.error("Error resetting:", error);
-        setMessage("Error resetting portfolio.");
-      }
-    };
+  // 1️⃣ Buy Crypto
+  const handleBuy = async () => {
+    const amount = parseFloat(buyAmount);
+    if (!buyAmount || isNaN(amount) || amount <= 0) {
+      setMessage("Please enter a valid buy amount.");
+      return;
+    }
+    try {
+      const response = await fetch(`http://localhost:8000/buy/${cryptoParam}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount: buyAmount }),
+      });
+      const result = await response.json();
+      setMessage(result.message || "Buy order placed!");
+    } catch (error) {
+      console.error("Error buying:", error);
+      setMessage("Error placing buy order.");
+    }
+  };
+
+  // 2️⃣ Sell Crypto
+  const handleSell = async () => {
+    const amount = parseFloat(sellAmount);
+    if (!sellAmount || isNaN(amount) || amount <= 0) {
+      setMessage("Please enter a valid sell amount.");
+      return;
+    }
+    try {
+      const response = await fetch(`http://localhost:8000/sell/${cryptoParam}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount: sellAmount }),
+      });
+      const result = await response.json();
+      setMessage(result.message || "Sell order placed!");
+    } catch (error) {
+      console.error("Error selling:", error);
+      setMessage("Error placing sell order.");
+    }
+  };
+
+  // 3️⃣ Reset Portfolio
+  const handleReset = async () => {
+    try {
+      const response = await fetch(`http://localhost:8000/reset`, { method: "POST" });
+      const result = await response.json();
+      setMessage(result.message || "Portfolio reset!");
+    } catch (error) {
+      console.error("Error resetting:", error);
+      setMessage("Error resetting portfolio.");
+    }
+  };
 
   return (
-    <div className="graph-container">
-    <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white p-6">
-      <h1 className="crytoHeading">{crypto} Live Price</h1>
-
-      {/* Dropdown to select update interval
-      <select
-        value={timeInterval}
-        onChange={(e) => setTimeInterval(Number(e.target.value))}
-        className="dropdown bg-gray-800 text-white p-2 rounded"
-      >
-        <option value={15000}>15 Seconds</option>
-        <option value={30000}>30 Seconds</option>
-        <option value={60000}>1 Minute</option>
-        <option value={120000}>2 Minutes</option>
-        <option value={300000}>5 Minutes</option>
-      </select> */}
-
-      {/* Live Price Graph */}
-      <div className="w-full max-w-4xl mt-6">
-        <LineChart width={900} height={400} data={priceHistory}>
-        <CartesianGrid strokeDasharray="3 3" stroke="gray" />
-          <XAxis dataKey="time" tick={{ fontSize: 12, fill: "white" }} stroke="white" />
-          <YAxis domain={yAxisRange ? yAxisRange : ["auto", "auto"]} tickFormatter={(value) => value.toFixed(2)} tick={{ fontSize: 12, fill: "white" }} stroke="white" />
-          <Tooltip formatter={(value) => value.toFixed(2)} contentStyle={{ backgroundColor: "white", borderColor: "white" }} />
-          <Line type="monotone" dataKey="price" stroke="#45ba8b" strokeWidth={2} dot={{ fill: "#ffffff" }} />
-        </LineChart>
+    <div className="graph-container" style={{ position: "relative" }}>
+      {/* Top-right purse and holdings box */}
+      <div style={{
+        position: "absolute",
+        top: 20,
+        right: 20,
+        background: "rgba(255, 255, 255, 0.9)",
+        color: "black",
+        padding: "10px",
+        borderRadius: "8px",
+        textAlign: "left",
+        minWidth: "200px"
+      }}>
+        <h3>Purse: ${portfolio.user_budget.toFixed(2)}</h3>
+        <h4>Holdings:</h4>
+        <ul>
+          {Object.keys(portfolio.portfolio).length === 0 ? (
+            <li>None</li>
+          ) : (
+            Object.entries(portfolio.portfolio).map(([ticker, amt]) => (
+              <li key={ticker}>{ticker}: {amt as number}</li>
+            ))
+          )}
+        </ul>
       </div>
+      
+      <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white p-6">
+        <h1 className="crytoHeading">{cryptoParam} Live Price</h1>
 
-        {/* Buttons */}
-      <div className="button-container">
-        <button className="buy-button" onClick={handleBuy}>Buy</button>
-        <button className="sell-button" onClick={handleSell}>Sell</button>
-        <button className="reset-button" onClick={handleReset}>Reset</button>
+        {/* Live Price Graph */}
+        <div className="w-full max-w-4xl mt-6">
+          <LineChart width={900} height={400} data={priceHistory}>
+            <CartesianGrid strokeDasharray="3 3" stroke="gray" />
+            <XAxis dataKey="time" tick={{ fontSize: 12, fill: "white" }} stroke="white" />
+            <YAxis domain={yAxisRange ? yAxisRange : ["auto", "auto"]} tickFormatter={(value) => value.toFixed(2)} tick={{ fontSize: 12, fill: "white" }} stroke="white" />
+            <Tooltip formatter={(value) => typeof value === 'number' ? value.toFixed(2) : value} contentStyle={{ backgroundColor: "white", borderColor: "white" }} />
+            <Line type="monotone" dataKey="price" stroke="#45ba8b" strokeWidth={2} dot={{ fill: "#ffffff" }} />
+          </LineChart>
+        </div>
+
+        {/* Trading Panel */}
+        <div className="button-container" style={{ flexDirection: "column", gap: "10px", marginTop: "20px" }}>
+          <div>
+            <input
+              type="number"
+              placeholder="Amount to Buy"
+              value={buyAmount}
+              onChange={(e) => setBuyAmount(e.target.value)}
+              style={{ marginRight: "10px", padding: "8px" }}
+            />
+            <button className="buy-button" onClick={handleBuy}>Buy</button>
+          </div>
+          <div>
+            <input
+              type="number"
+              placeholder="Amount to Sell"
+              value={sellAmount}
+              onChange={(e) => setSellAmount(e.target.value)}
+              style={{ marginRight: "10px", padding: "8px" }}
+            />
+            <button className="sell-button" onClick={handleSell}>Sell</button>
+          </div>
+          <button className="reset-button" onClick={handleReset}>Reset Portfolio</button>
+        </div>
+
+        {/* Status Message */}
+        {message && <p className="status-message">{message}</p>}
       </div>
-
-      {/* Status Message */}
-      {message && <p className="status-message">{message}</p>}
-
-    </div>
     </div>
   );
 };
