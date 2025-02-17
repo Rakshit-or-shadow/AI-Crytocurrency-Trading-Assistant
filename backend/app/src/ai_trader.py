@@ -75,10 +75,21 @@ class AITrader:
         total_value = self.balance + self.shares * current_price
         return total_value
 
+    def save_trade_data(self):
+        data = {
+            "price_history": self.price_history,
+            "trade_history": self.trade_history,
+            "balance": self.balance,
+            "shares": self.shares,
+            "total_value": self.calculate_total_value()
+        }
+        with open("trade_data.json", "w") as f:
+            json.dump(data, f, indent=4)
+
     def trade(self):
         purchase_price = None  # None means no active buy position
 
-        while self.running and (time.time() - self.start_time) < 600:  # Maximum trading duration of 10 minutes
+        while self.running:
             current_price = self.fetch_current_price()
             if current_price is None:
                 print("Skipping trade due to missing price data")
@@ -138,6 +149,10 @@ class AITrader:
 
             total_value = self.calculate_total_value()
             print(f"Total Value: {total_value} USD")
+
+            # Save trade data to JSON file
+            self.save_trade_data()
+
             time.sleep(1)
 
         print(f"Final balance: {self.balance}")
@@ -145,7 +160,7 @@ class AITrader:
 
     def plot_trade_actions(self):
         fig, ax = plt.subplots(figsize=(10, 5))
-        ax.set_xlabel('Time (minutes)')
+        ax.set_xlabel('Time (Seconds)')
         ax.set_ylabel('Price (USD)')
         ax.set_title(f'Trade Actions for {self.trading_pair}')
 
@@ -233,7 +248,6 @@ if __name__ == "__main__":
 
         # Optionally, start plotting price history and trade actions
         try:
-            trader.plot_price_history()
             trader.plot_trade_actions()
         except KeyboardInterrupt:
             trader.stop()
