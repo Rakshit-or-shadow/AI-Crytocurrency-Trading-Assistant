@@ -150,7 +150,10 @@ const handleBuy = async () => {
   // ...existing JSX...
   return (
     <div className="main-container">
-      
+      <div className="left-container">
+        hello
+      </div>
+      <div className="right-container">
       {/* Middle Column: Graph (UNCHANGED) */}
       <div className="middle-column">
         <h1 className="cryptoHeading">{cryptoParam} Live Price</h1>
@@ -229,7 +232,7 @@ const handleBuy = async () => {
   {/* Status Message */}
   {message && <p className="status-message">{message}</p>}
 </div>
-
+</div>
 
   
       {/* Status Message */}
