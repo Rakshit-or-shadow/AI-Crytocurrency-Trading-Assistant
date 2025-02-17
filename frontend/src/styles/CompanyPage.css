@@ -19,9 +19,11 @@
     margin-bottom: 5px;
   }
    */
+
   /* Middle Column - Chart */
   .middle-column {
-    width: 100%;
+    width: 70%;
+    justify-content: center;
     text-align: center;
   }
   
@@ -31,6 +33,7 @@
   }
   
   .chart-container {
+    width: 140%;
     background: #1e1e1e;
     padding: 15px;
     border-radius: 10px;
@@ -38,6 +41,7 @@
   
 /* Container for left and right columns */
 .bottom-columns {
+    margin-left: 100px;
     display: flex;
     justify-content:space-evenly; /* Push left and right to edges */
     width: 100%;
