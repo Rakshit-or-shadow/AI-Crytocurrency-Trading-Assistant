@@ -147,10 +147,76 @@ const handleBuy = async () => {
     }
   };
 
+<<<<<<< HEAD
   // ...existing JSX...
   return (
     <div className="main-container">
       
+=======
+  useEffect(() => {
+    const fetchStatisticalAnalysis = async () => {
+      try {
+        const response = await fetch(`http://localhost:8000/analytics/${cryptoParam}`);
+        const data = await response.json();
+        setStatisticalAnalysis(data);
+      } catch (error) {
+        console.error("Error fetching statistical analysis:", error);
+        setStatisticalAnalysis({ error: "Failed to load statistical data" });
+      }
+    };
+
+    fetchStatisticalAnalysis();
+  }, [cryptoParam]);
+
+  const [showAITrading, setShowAITrading] = useState(false);
+
+
+
+  // ...existing JSX...
+  return (
+    <div className="main-container">
+<div className="left-container">
+  <h2>Statistical Analysis</h2>
+  {statisticalAnalysis ? (
+    statisticalAnalysis.error ? (
+      <p>{statisticalAnalysis.error}</p>
+    ) : (
+      <ul>
+        <li>
+          <strong>Price Change (24h):</strong> 
+          <span className={statisticalAnalysis.price_change_24h >= 0 ? "price-change-positive" : "price-change-negative"}>
+            ${statisticalAnalysis.price_change_24h}
+          </span>
+        </li>
+        <li>
+          <strong>High (24h):</strong> 
+          <span className="high-value">${statisticalAnalysis.high_24h}</span>
+        </li>
+        <li>
+          <strong>Low (24h):</strong> 
+          <span className="low-value">${statisticalAnalysis.low_24h}</span>
+        </li>
+        <li>
+          <strong>Volume (24h):</strong> {statisticalAnalysis.volume_24h}
+        </li>
+        <li>
+          <strong>Market Status:</strong> 
+          <span className={statisticalAnalysis.volatility === "✅ Stable Market" ? "market-status-green" : "market-status-red"}>
+            {statisticalAnalysis.volatility}
+          </span>
+        </li>
+      </ul>
+    )
+  ) : (
+    <p>Loading...</p>
+  )}
+</div>
+
+
+
+
+      <div className="right-container">
+>>>>>>> 51a75d5309f06e38b4f26a1366da1ab8106669ae
       {/* Middle Column: Graph (UNCHANGED) */}
       <div className="middle-column">
         <h1 className="cryptoHeading">{cryptoParam} Live Price</h1>
@@ -229,13 +295,31 @@ const handleBuy = async () => {
   {/* Status Message */}
   {message && <p className="status-message">{message}</p>}
 </div>
+<<<<<<< HEAD
 
 
   
       {/* Status Message */}
+=======
+{showAITrading && (
+  <div className="ai-trading-section">
+    <TradingGraph />
+  </div>
+)}
+<button className="toggle-ai-trading-button" onClick={() => setShowAITrading(!showAITrading)}>
+  {showAITrading ? "Hide AI Trading" : "Watch the AI bot trade "}
+</button>
+</div>
+>>>>>>> 51a75d5309f06e38b4f26a1366da1ab8106669ae
 
     </div>
-  );
+    
+  )
+  
+  
+  ;
+
+
   
   ;
 };
