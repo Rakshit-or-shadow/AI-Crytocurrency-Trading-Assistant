@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import TradingGraph from "./AITradingGraph";
 import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
 import "./styles/CompanyPage.css"; 
 // import "./styles/main.css";
@@ -232,10 +233,8 @@ const handleBuy = async () => {
   {/* Status Message */}
   {message && <p className="status-message">{message}</p>}
 </div>
+<TradingGraph></TradingGraph>
 </div>
-
-  
-      {/* Status Message */}
 
     </div>
   );
