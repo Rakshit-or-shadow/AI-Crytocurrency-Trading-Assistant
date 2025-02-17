@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import TradingGraph from "./AITradingGraph";
 import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
 import "./styles/CompanyPage.css"; 
 // import "./styles/main.css";
@@ -21,7 +22,8 @@ const CompanyPage: React.FC = () => {
     user_budget: 250000,
     portfolio: {}
   });
-
+  const [statisticalAnalysis, setStatisticalAnalysis] = useState<any>(null);
+  
   // Fetch current portfolio periodically (every 4 sec)
   useEffect(() => {
     const fetchPortfolio = async () => {
@@ -147,12 +149,6 @@ const handleBuy = async () => {
     }
   };
 
-<<<<<<< HEAD
-  // ...existing JSX...
-  return (
-    <div className="main-container">
-      
-=======
   useEffect(() => {
     const fetchStatisticalAnalysis = async () => {
       try {
@@ -216,10 +212,9 @@ const handleBuy = async () => {
 
 
       <div className="right-container">
->>>>>>> 51a75d5309f06e38b4f26a1366da1ab8106669ae
       {/* Middle Column: Graph (UNCHANGED) */}
       <div className="middle-column">
-        <h1 className="cryptoHeading">{cryptoParam} Live Price</h1>
+        <h1 className="crypto-heading">{cryptoParam} Live Price</h1>
         <div className="chart-container">
         <LineChart width={900} height={400} data={priceHistory}>
             <CartesianGrid strokeDasharray="3 3" stroke="gray" />
@@ -295,12 +290,6 @@ const handleBuy = async () => {
   {/* Status Message */}
   {message && <p className="status-message">{message}</p>}
 </div>
-<<<<<<< HEAD
-
-
-  
-      {/* Status Message */}
-=======
 {showAITrading && (
   <div className="ai-trading-section">
     <TradingGraph />
@@ -310,7 +299,6 @@ const handleBuy = async () => {
   {showAITrading ? "Hide AI Trading" : "Watch the AI bot trade "}
 </button>
 </div>
->>>>>>> 51a75d5309f06e38b4f26a1366da1ab8106669ae
 
     </div>
     
