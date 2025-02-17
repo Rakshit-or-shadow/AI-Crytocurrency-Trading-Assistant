@@ -15,25 +15,69 @@ body {
     width: 90%;
     max-width: 1000px;
     background: rgba(20, 20, 20, 0.85);
-    padding: 40px;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(15px);
+    padding: 60px;
+    border-radius: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(20px);
+    transform: scale(1.1); /* Scales up the box */
     color: white;
-    max-height: 500px;
-
 }
 
-button {
+.options {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    max-width: 900px;
+    margin: auto;
+    padding-top: 30px;
+    
+}
+
+.options button {
     background-color: #58b785;
     color: #ffffff;
-    margin-left: 10px;
-    margin-right: 10px;
-    width: 140px;
-    margin-top: 10px;
+    padding: 15px 25px;
+    font-size: 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    border: none;
+    text-align: center;
+    transform: scale(1.1); /* Scales buttons slightly */
+    border: 2px transparent !important
 }
 
-button:hover {
-    background-color: #21754f;
+.options button:hover {
+    background-color: rgba(20, 20, 20, 0.85) ;
+    /* transform: scale(1.15); */
+    border: 2px #58b785 !important;
+}
+
+/* Ensure last row is centered properly when using 3 columns */
+@media (max-width: 900px) {
+    .options {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .options button:nth-last-child(1):nth-child(3n + 1) {
+        grid-column: span 2;
+        justify-self: center;
+    }
+}
+
+/* Switch to 2 columns instead of 1 */
+@media (max-width: 600px) {
+    .options {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Keep 2 columns for smaller screens */
+@media (max-width: 400px) {
+    .options {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
