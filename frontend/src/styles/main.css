@@ -3,14 +3,10 @@ body {
   color: #000000;
 }
 
-a {
-  color: #21754f;
-  text-decoration: none;
+body {
+  font-family: 'Monserrate'!important;
 }
 
-a:hover {
-  color: #5e9076;
-}
 
 button {
   background-color: #58b785;
@@ -19,15 +15,17 @@ button {
   font-size: 1rem;
   border-radius: 6px;
   cursor: pointer;
-  transition: all 0.3s ease-in-out;
   text-align: center;
   backdrop-filter: blur(8px);
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-  border: none;
+  border: 2px solid transparent;
+  transition: 0.4s ease-in-out;
+
 }
 
-button:hover {
-  background-color: #21754f;
-  transform: scale(1.05);
-  box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.5);
+button:hover{
+  border: 2px solid #58b785;
+  background-color: transparent;
+  color: black;
+  
 }

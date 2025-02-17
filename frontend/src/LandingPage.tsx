@@ -15,8 +15,9 @@ const LandingPage: React.FC = () => {
   return (
     <div className="container">
       <h1>Welcome!</h1>
+      <h3>Select a Cryptocurrency:</h3>
       <div className="options">
-        <h3>Select a Cryptocurrency:</h3>
+       
         {topCryptos.map((crypto) => (
           <button key={crypto} onClick={() => navigate(`/crypto/${crypto}`)}>
             {crypto}
