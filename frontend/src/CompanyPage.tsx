@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
+import "./styles/CompanyPage.css";
 
 const CompanyPage: React.FC = () => {
   const { crypto } = useParams<{ crypto: string }>(); // Get crypto name from URL

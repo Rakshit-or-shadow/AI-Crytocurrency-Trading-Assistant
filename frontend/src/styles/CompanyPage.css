@@ -29,6 +29,44 @@
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.button-container {
+    display: flex;
+    justify-content: center;  /* Centers horizontally */
+    align-items: center;      /* Centers vertically (if needed) */
+    gap: 15px;                /* Adds spacing between buttons */
+    margin-top: 20px;
+  }
+  
+  button {
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: 0.3s;
+    text-align: center;
+  }
+  
+  .buy-button {
+    background-color: #4caf50;
+    color: white;
+  }
+  
+  .sell-button {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  .reset-button {
+    background-color: #ff9800;
+    color: white;
+  }
+  
+  button:hover {
+    opacity: 0.8;
+  }
+  
+
 /* Responsive Adjustments */
 @media (max-width: 900px) {
     .company-list {
