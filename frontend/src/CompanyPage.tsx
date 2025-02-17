@@ -47,7 +47,7 @@ const CompanyPage: React.FC = () => {
         if (data.price !== null) {
           setPriceHistory((prev) => {
             const updatedHistory = [
-              ...prev.slice(-20),
+              ...prev.slice(-15),
               { time: new Date().toLocaleTimeString(), price: data.price }
             ];
 
@@ -215,11 +215,13 @@ const handleBuy = async () => {
   
           {/* Reset Portfolio */}
           <button className="reset-button" onClick={handleReset}>RESET PORTFOLIO</button>
+          {message && <p className="status-message">{message}</p>}
         </div>
+        
       </div>
   
       {/* Status Message */}
-      {message && <p className="status-message">{message}</p>}
+
     </div>
   );
   
