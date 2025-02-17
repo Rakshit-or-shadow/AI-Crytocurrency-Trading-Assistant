@@ -1,7 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "./styles/LandingPage.css"; 
 import "./styles/main.css"
+
+import "./styles/LandingPage.css"; 
 
 
 const LandingPage: React.FC = () => {
@@ -14,7 +15,7 @@ const LandingPage: React.FC = () => {
       <h3>Which company do you wanna trade?</h3>
         <button onClick={() => navigate("/company/NVIDIA")}>NVIDIA</button>
         <button onClick={() => navigate("/company/ALPHABET")}>GOOGLE</button>
-        <button onClick={() => navigate("company/APPLE")}>APPLE</button>
+        <button onClick={() => navigate("/company/APPLE")}>APPLE</button>
         <button onClick={() => navigate("/company/META")}>META</button>
         <button onClick={() => navigate("/company/TESLA")}>TESLA</button>
         <button onClick={() => navigate("/company/MICROSOFT")}>MICROSOFT</button>

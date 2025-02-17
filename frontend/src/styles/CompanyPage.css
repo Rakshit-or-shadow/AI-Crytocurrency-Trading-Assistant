@@ -1,32 +1,20 @@
 .company-container {
     text-align: center;
-    background-color: black;
+    background-color: #0C1821; /* Match global theme */
     color: white;
     padding: 20px;
     border-radius: 10px;
-  }
-  
-  .chart-container {
-    background-color: black;
+    box-shadow: 0px 5px 15px rgba(255, 255, 255, 0.1);
+}
+
+.chart-container {
+    background-color: #1B2A41;
     padding: 20px;
     border-radius: 10px;
-  }
-  
-  .linechart {
-    stroke-width: 3;
-  }
-  
-  button {
-    background-color: limegreen !important; 
-    color: black;
-    font-weight: bold;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 10px;
-  }
-  
-  button:hover {
-    background-color: darkgreen;
-  }
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.linechart {
+    stroke-width: 2.5;
+}
+

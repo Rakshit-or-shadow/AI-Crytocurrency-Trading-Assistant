@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
+import "./styles/main.css";
 import "./styles/CompanyPage.css";
 
-// import "./styles/main.css";
+
 
 const CompanyPage: React.FC = () => {
   const { companyName } = useParams<{ companyName: string }>();
@@ -45,7 +46,8 @@ const CompanyPage: React.FC = () => {
       </div>
 
       {/* Example Button */}
-      <button>Sample Button</button>
+      <button>BUY</button>
+      <button>SELL</button>
     </div>
   );
 };
