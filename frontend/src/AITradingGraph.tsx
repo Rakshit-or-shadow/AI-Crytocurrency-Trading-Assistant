@@ -1,36 +1,35 @@
 import React, { useEffect, useState } from "react";
-import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
 
-interface TradeData {
-  time: string;
-  price: number;
-  type: "BUY" | "SELL";
-}
-
-const TradingGraph: React.FC = () => {
-  const [data, setData] = useState<TradeData[]>([]);
+const AITradingGraph: React.FC = () => {
+  const [priceHistory, setPriceHistory] = useState<{ time: string; price: number }[]>([]);
 
   useEffect(() => {
-    fetch("/api/trades") // Fetch data from backend API
-      .then((response) => response.json())
-      .then((data) => setData(data))
-      .catch((error) => console.error("Error fetching trade data:", error));
+    const fetchPriceHistory = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/ai-trading-history");
+        const data = await response.json();
+        setPriceHistory(data.price_history);
+      } catch (error) {
+        console.error("Error fetching AI trading history:", error);
+      }
+    };
+
+    fetchPriceHistory();
   }, []);
 
   return (
-    <div style={{ width: "100%", height: 500, textAlign: "center" }}>
-      <h2>Trading Bot Reccomendations</h2>
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={data}>
-          <XAxis dataKey="time" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Line type="monotone" dataKey="price" stroke="#8884d8" />
-        </LineChart>
-      </ResponsiveContainer>
+    <div className="ai-trading-graph">
+      <h2>AI Trading History</h2>
+      <LineChart width={900} height={400} data={priceHistory}>
+        <CartesianGrid strokeDasharray="3 3" stroke="gray" />
+        <XAxis dataKey="time" tick={{ fontSize: 12, fill: "white" }} stroke="white" />
+        <YAxis tickFormatter={(value) => value.toFixed(2)} tick={{ fontSize: 12, fill: "white" }} stroke="white" />
+        <Tooltip formatter={(value) => typeof value === 'number' ? value.toFixed(2) : value} contentStyle={{ backgroundColor: "white", borderColor: "white" }} />
+        <Line type="monotone" dataKey="price" stroke="#45ba8b" strokeWidth={2} dot={{ fill: "#ffffff" }} />
+      </LineChart>
     </div>
   );
 };
 
-export default TradingGraph;
+export default AITradingGraph;

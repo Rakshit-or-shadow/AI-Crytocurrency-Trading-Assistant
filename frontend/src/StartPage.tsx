@@ -9,7 +9,7 @@ const StartPage: React.FC = () => {
   return (
     <div className="maincontainer">
     <div className="start-container">
-      <h1 className="title">Crypto Trading Assistant</h1>
+      <h1 className="title">Cryptocurrency Trading Assistant</h1>
       <button className="play-button" onClick={() => navigate("/welcome")}>
         Start Trading
       </button>
