@@ -1,15 +1,12 @@
 body {
-  background-color: #f6f2df;
-  color: #000000;
-}
-
-body {
   font-family: 'Graphik', sans-serif !important;
+  background-color: #121212 !important;
 }
 
 button {
   background-color: #58b785;
   color: #ffffff;
+  background-color: black ;
   padding: 12px 24px;
   font-size: 1rem;
   border-radius: 6px;
@@ -22,8 +19,3 @@ button {
 
 }
 
-button:hover{
-  border: 2px solid #f3eeee;
-  background-color: transparent;
-  color: black;
-}

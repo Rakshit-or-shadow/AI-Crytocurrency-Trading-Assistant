@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
 import "./styles/CompanyPage.css"; 
-import "./styles/main.css";
+// import "./styles/main.css";
 
 const CompanyPage: React.FC = () => {
   const { crypto } = useParams<{ crypto: string }>();
@@ -151,6 +151,21 @@ const handleBuy = async () => {
   return (
     <div className="main-container">
       
+      {/* Middle Column: Graph (UNCHANGED) */}
+      <div className="middle-column">
+        <h1 className="cryptoHeading">{cryptoParam} Live Price</h1>
+        <div className="chart-container">
+        <LineChart width={900} height={400} data={priceHistory}>
+            <CartesianGrid strokeDasharray="3 3" stroke="gray" />
+            <XAxis dataKey="time" tick={{ fontSize: 12, fill: "white" }} stroke="white" />
+            <YAxis domain={yAxisRange ? yAxisRange : ["auto", "auto"]} tickFormatter={(value) => value.toFixed(2)} tick={{ fontSize: 12, fill: "white" }} stroke="white" />
+            <Tooltip formatter={(value) => typeof value === 'number' ? value.toFixed(2) : value} contentStyle={{ backgroundColor: "white", borderColor: "white" }} />
+            <Line type="monotone" dataKey="price" stroke="#45ba8b" strokeWidth={2} dot={{ fill: "#ffffff" }} />
+          </LineChart>
+        </div>
+      </div>
+  
+    <div className="bottom-columns">
       {/* Left Column: Wallet Info (Purse & Holdings) */}
       <div className="left-column">
         <div className="wallet-info">
@@ -167,21 +182,7 @@ const handleBuy = async () => {
           </ul>
         </div>
       </div>
-  
-      {/* Middle Column: Graph (UNCHANGED) */}
-      <div className="middle-column">
-        <h1 className="cryptoHeading">{cryptoParam} Live Price</h1>
-        <div className="chart-container">
-        <LineChart width={900} height={400} data={priceHistory}>
-            <CartesianGrid strokeDasharray="3 3" stroke="gray" />
-            <XAxis dataKey="time" tick={{ fontSize: 12, fill: "white" }} stroke="white" />
-            <YAxis domain={yAxisRange ? yAxisRange : ["auto", "auto"]} tickFormatter={(value) => value.toFixed(2)} tick={{ fontSize: 12, fill: "white" }} stroke="white" />
-            <Tooltip formatter={(value) => typeof value === 'number' ? value.toFixed(2) : value} contentStyle={{ backgroundColor: "white", borderColor: "white" }} />
-            <Line type="monotone" dataKey="price" stroke="#45ba8b" strokeWidth={2} dot={{ fill: "#ffffff" }} />
-          </LineChart>
-        </div>
-      </div>
-  
+      
       {/* Right Column: Buy/Sell & Reset Portfolio */}
       <div className="right-column">
         <div className="trading-box">
@@ -212,7 +213,7 @@ const handleBuy = async () => {
             />
             <button className="sell-button" onClick={handleSell}>SELL</button>
           </div>
-  
+     </div>
           {/* Reset Portfolio */}
           <button className="reset-button" onClick={handleReset}>RESET PORTFOLIO</button>
           {message && <p className="status-message">{message}</p>}
