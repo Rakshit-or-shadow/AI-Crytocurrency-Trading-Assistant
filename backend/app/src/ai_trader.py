@@ -11,6 +11,7 @@ import requests
 from datetime import datetime
 from rl_model import RLTrader
 
+
 class AITrader:
     def __init__(self, api_key, api_secret, trading_pair='BTC-USD'):
         self.client = Client(api_key, api_secret)
@@ -141,24 +142,6 @@ class AITrader:
 
         print(f"Final balance: {self.balance}")
         print(f"Final total value: {self.calculate_total_value()} USD")
-    
-    def plot_price_history(self):
-        fig, ax = plt.subplots(figsize=(10, 5))
-        ax.set_xlabel('Time (minutes)')
-        ax.set_ylabel('Price (USD)')
-        ax.set_title(f'Price History for {self.trading_pair}')
-
-        line, = ax.plot([], [], label='Price')
-        ax.legend()
-
-        def update(frame):
-            line.set_data(range(len(self.price_history)), self.price_history)
-            ax.relim()
-            ax.autoscale_view()
-            return line,
-
-        ani = FuncAnimation(fig, update, interval=1000, cache_frame_data=False)
-        plt.show()
 
     def plot_trade_actions(self):
         fig, ax = plt.subplots(figsize=(10, 5))
@@ -167,23 +150,30 @@ class AITrader:
         ax.set_title(f'Trade Actions for {self.trading_pair}')
 
         line, = ax.plot([], [], label='Price')
-        buy_scatter = ax.scatter([], [], color='green', label='Buy', marker='^')
-        sell_scatter = ax.scatter([], [], color='red', label='Sell', marker='v')
+        buy_lines, = ax.plot([], [], color='green', label='Buy', linestyle='--')
+        sell_lines, = ax.plot([], [], color='red', label='Sell', linestyle='--')
+        buy_scatter = ax.scatter([], [], color='green', marker='o')
+        sell_scatter = ax.scatter([], [], color='red', marker='x')
         ax.legend()
 
         def update(frame):
             line.set_data(range(len(self.price_history)), self.price_history)
+            
             buy_times = [i for i, (action, price, amount) in enumerate(self.trade_history) if action == 'buy']
             buy_prices = [price for action, price, amount in self.trade_history if action == 'buy']
             sell_times = [i for i, (action, price, amount) in enumerate(self.trade_history) if action == 'sell']
             sell_prices = [price for action, price, amount in self.trade_history if action == 'sell']
+            
             if buy_times and buy_prices:
-                buy_scatter.set_offsets(list(zip(buy_times, buy_prices)))
+                buy_lines.set_data(buy_times, buy_prices)
+                buy_scatter.set_offsets(np.c_[buy_times, buy_prices])
             if sell_times and sell_prices:
-                sell_scatter.set_offsets(list(zip(sell_times, sell_prices)))
+                sell_lines.set_data(sell_times, sell_prices)
+                sell_scatter.set_offsets(np.c_[sell_times, sell_prices])
+            
             ax.relim()
             ax.autoscale_view()
-            return line, buy_scatter, sell_scatter
+            return line, buy_lines, sell_lines, buy_scatter, sell_scatter
 
         ani = FuncAnimation(fig, update, interval=1000, cache_frame_data=False)
         plt.show()

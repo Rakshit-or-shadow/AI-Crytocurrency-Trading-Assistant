@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import TradingGraph from "./AITradingGraph";
 import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
 import "./styles/CompanyPage.css"; 
 // import "./styles/main.css";
@@ -22,8 +21,7 @@ const CompanyPage: React.FC = () => {
     user_budget: 250000,
     portfolio: {}
   });
-  const [statisticalAnalysis, setStatisticalAnalysis] = useState<any>(null);
-  
+
   // Fetch current portfolio periodically (every 4 sec)
   useEffect(() => {
     const fetchPortfolio = async () => {
@@ -149,66 +147,13 @@ const handleBuy = async () => {
     }
   };
 
-  useEffect(() => {
-    const fetchStatisticalAnalysis = async () => {
-      try {
-        const response = await fetch(`http://localhost:8000/analytics/${cryptoParam}`);
-        const data = await response.json();
-        setStatisticalAnalysis(data);
-      } catch (error) {
-        console.error("Error fetching statistical analysis:", error);
-        setStatisticalAnalysis({ error: "Failed to load statistical data" });
-      }
-    };
-
-    fetchStatisticalAnalysis();
-  }, [cryptoParam]);
-
   // ...existing JSX...
   return (
     <div className="main-container">
-<div className="left-container">
-  <h2>Statistical Analysis</h2>
-  {statisticalAnalysis ? (
-    statisticalAnalysis.error ? (
-      <p>{statisticalAnalysis.error}</p>
-    ) : (
-      <ul>
-        <li>
-          <strong>Price Change (24h):</strong> 
-          <span className={statisticalAnalysis.price_change_24h >= 0 ? "price-change-positive" : "price-change-negative"}>
-            ${statisticalAnalysis.price_change_24h}
-          </span>
-        </li>
-        <li>
-          <strong>High (24h):</strong> 
-          <span className="high-value">${statisticalAnalysis.high_24h}</span>
-        </li>
-        <li>
-          <strong>Low (24h):</strong> 
-          <span className="low-value">${statisticalAnalysis.low_24h}</span>
-        </li>
-        <li>
-          <strong>Volume (24h):</strong> {statisticalAnalysis.volume_24h}
-        </li>
-        <li>
-          <strong>Market Status:</strong> 
-          <span className={statisticalAnalysis.volatility === "✅ Stable Market" ? "market-status-green" : "market-status-red"}>
-            {statisticalAnalysis.volatility}
-          </span>
-        </li>
-      </ul>
-    )
-  ) : (
-    <p>Loading...</p>
-  )}
-</div>
-
-
-      <div className="right-container">
+      
       {/* Middle Column: Graph (UNCHANGED) */}
       <div className="middle-column">
-        <h1 className="crypto-heading">{cryptoParam} Live Price</h1>
+        <h1 className="cryptoHeading">{cryptoParam} Live Price</h1>
         <div className="chart-container">
         <LineChart width={900} height={400} data={priceHistory}>
             <CartesianGrid strokeDasharray="3 3" stroke="gray" />
@@ -284,8 +229,10 @@ const handleBuy = async () => {
   {/* Status Message */}
   {message && <p className="status-message">{message}</p>}
 </div>
-<TradingGraph></TradingGraph>
-</div>
+
+
+  
+      {/* Status Message */}
 
     </div>
   );
