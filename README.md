@@ -1,98 +1,62 @@
-# Stock Market Simulator
+Day 1 – 
+Core Development
 
-## 🚀 Overview
-This project is an AI-driven stock market simulator that allows users to trade stocks in real-time using reinforcement learning (RL) and sentiment analysis from financial articles. The simulator pulls real-time stock prices from an API and adjusts trading strategies based on market trends and news sentiment.
+Setup & Basic UI:
 
-## 🛠 Tech Stack
-- **Frontend**: React, Tailwind CSS, Recharts
-- **Backend**: Python (FastAPI)
-- **AI**: TensorFlow (Reinforcement Learning), NLP for Sentiment Analysis
-- **Stock Data**: Alpha Vantage, Finnhub, or Yahoo Finance API
-- **Financial Articles**: NewsAPI + NLP (Transformers, NLTK)
-- **Performance (Optional)**: C for performance optimizations
+React project is set up with Tailwind CSS.
+UI components such as Dashboard, Stock Chart, and Trade Panel are implemented in src.
 
-## ⏳ Development Plan
+Real-Time Stock Price API Integration:
 
-### Day 1 – Core Game Development (React UI, Stock Market Logic, & API Integration)
-**Focus**: Basic Game + Trading System + Real-Time Stock Data
+FastAPI backend is set up in utils.py.
+Real-time stock prices are fetched using the Coinbase API.
 
-#### 🕒 Hour 1-2: Setup & Basic UI
-- **Frontend (React + Tailwind CSS)**:
-  - Initialize a React project.
-  - Install Tailwind CSS and configure it.
+Trading System:
 
-- **Create UI Components**:
-  - Dashboard: Displays player balance, stock prices, and trading buttons.
-  - Stock Chart: Uses Recharts for dynamic visualization.
-  - Trade Panel: Contains buy/sell buttons.
+State management for player balance, owned stocks, and transaction history is implemented in CompanyPage.tsx.
+Buy/sell transactions are handled in the backend.
 
-#### 🕒 Hour 3-4: Real-Time Stock Price API Integration
-- **Backend (Python + FastAPI)**:
-  - Set up FastAPI backend and install dependencies.
-  - Fetch real-time stock prices from a stock price API (e.g., Yahoo Finance, Alpha Vantage, or Finnhub).
+Stock Market Logic & Sentiment Analysis Prep:
 
-#### 🕒 Hour 5-7: Trading System
-- **Frontend (React)**:
-  - Use state management to store player balance, owned stocks, and transaction history.
-  - Dynamically update the UI with price changes.
+Market events like random stock booms/crashes are introduced in ai_trader.py.
+Financial news articles are fetched for sentiment analysis.
 
-- **Backend (Python FastAPI)**:
-  - Handle buy/sell transactions.
+Day 2 – 
+AI with Reinforcement Learning & Financial Article Analysis
 
-#### 🕒 Hour 8-10: Stock Market Logic & Sentiment Analysis Prep
-- Introduce market events like random stock booms/crashes.
-- Fetch financial news articles for sentiment analysis.
+AI Trader (Basic Decision Making):
+AI trader fetches real stock prices and implements basic trading strategies in ai_trader.py.
 
-### Day 2 – AI with Reinforcement Learning & Financial Article Analysis
-**Focus**: AI Trading Bots & Market Learning
+AI with Reinforcement Learning (RL):
 
-#### 🕒 Hour 11-14: AI Trader (Basic Decision Making)
-- **Backend (Python)**:
-  - AI fetches real stock prices and implements a basic trading strategy, buying when the price is rising and selling when it is falling.
+TensorFlow is installed, and an RL model is defined and trained in rl_model.py.
+The trained RL model makes real-time buy/sell decisions.
 
-#### 🕒 Hour 15-18: AI with Reinforcement Learning (RL)
-- **Backend (Python + TensorFlow)**:
-  - Install TensorFlow and other dependencies.
-  - Define and train an RL model for making trading decisions based on past stock data.
+Financial Article Sentiment Analysis:
 
-- **Deploy AI to Make Real-Time Trades**:
-  - Use the trained RL model to make buy/sell decisions in real-time.
+NLP packages for sentiment analysis are installed.
+Sentiment is extracted from financial articles using a sentiment analysis model in ai_trader.py.
+AI adjusts trading decisions based on sentiment.
 
-#### 🕒 Hour 19-22: Financial Article Sentiment Analysis
-- **Backend (Python + NLP)**:
-  - Install NLP packages for sentiment analysis.
-  - Extract sentiment from financial articles using a sentiment analysis model.
+Final 4-6 Hours – Polishing, Testing & Deployment
 
-- **AI Adjusts Trades Based on Sentiment**:
-  - AI adjusts trading decisions based on positive or negative sentiment from financial news articles.
+UI/UX Enhancements:
+Stock graphs, animations, and layout optimizations are implemented in styles.
 
-### Final 4-6 Hours – Polishing, Testing & Deployment
+Testing & Debugging:
+API calls for stock prices and news are tested.
+AI trading logic is tested to ensure it reacts properly to market trends.
+The reinforcement learning model is verified to adjust dynamically.
 
-#### 🕒 Hour 23-26: UI/UX Enhancements
-- Improve stock graphs, add animations, and optimize layout.
-- Add tooltips for stock trends and AI decisions.
+Deployment:
 
-#### 🕒 Hour 27-30: Testing & Debugging
-- Ensure that API calls work for stock prices and news.
-- Test AI trading logic to ensure it reacts properly to market trends.
-- Verify that the reinforcement learning model adjusts dynamically.
+The React frontend can be deployed on Vercel.
+The FastAPI backend can be deployed on Render or AWS.
 
-#### 🕒 Hour 31-34: Deployment
-- **Frontend (React on Vercel)**:
-  - Deploy the React frontend on Vercel.
-  
-- **Backend (FastAPI on Render/AWS)**:
-  - Deploy the Python backend on Render or AWS.
+Stretch Goals
 
-## 🚀 Stretch Goals (If Time Allows)
-- C module for performance optimizations (e.g., faster AI calculations).
-- Stock market news events that dynamically impact AI trading.
-- Multiple AI personalities (aggressive, cautious, reactive).
-- Customizable player trading strategies.
 
-## 🔧 Getting Started
-To run the project locally, follow these steps:
+Performance Optimizations: Not explicitly mentioned in the provided code.
+Stock Market News Events: Partially implemented with sentiment analysis.
+Multiple AI Personalities: Not explicitly mentioned in the provided code.
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/Rakshit-or-shadow/stock-market-simulator
