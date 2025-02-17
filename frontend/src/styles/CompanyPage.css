@@ -1,32 +1,49 @@
 .company-container {
     text-align: center;
-    background-color: black;
-    color: white;
+    background-color: #f6f2df;
+    color: #000000;
     padding: 20px;
     border-radius: 10px;
-  }
-  
-  .chart-container {
-    background-color: black;
+    border: 2px solid #58b785;
+    max-width: 1000px;
+    margin: auto;
+}
+
+.company-list {
+    display: grid !important;
+    grid-template-columns: repeat(5, 1fr) !important; /* Ensure exactly 5 columns */
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
     padding: 20px;
+}
+
+.company-box {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #58b785;
+    background-color: #f6f2df;
+    color: #000000;
+    text-align: center;
     border-radius: 10px;
-  }
-  
-  .linechart {
-    stroke-width: 3;
-  }
-  
-  button {
-    background-color: limegreen !important; 
-    color: black;
-    font-weight: bold;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 10px;
-  }
-  
-  button:hover {
-    background-color: darkgreen;
-  }
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 900px) {
+    .company-list {
+        grid-template-columns: repeat(3, 1fr) !important; /* 3 columns for medium screens */
+    }
+}
+
+@media (max-width: 600px) {
+    .company-list {
+        grid-template-columns: repeat(2, 1fr) !important; /* 2 columns for smaller screens */
+    }
+}
+
+@media (max-width: 400px) {
+    .company-list {
+        grid-template-columns: repeat(1, 1fr) !important; /* 1 column for very small screens */
+    }
+}
