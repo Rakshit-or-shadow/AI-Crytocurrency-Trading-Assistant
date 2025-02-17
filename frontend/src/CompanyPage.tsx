@@ -160,8 +160,8 @@ const handleBuy = async () => {
             {Object.keys(portfolio.portfolio).length === 0 ? (
               <li>None</li>
             ) : (
-              Object.entries(portfolio.portfolio).map(([ticker, amt]) => (
-                <li key={ticker}>{ticker}: {amt as number}</li>
+          Object.entries(portfolio.portfolio).map(([ticker, usdValue]) => (
+                <li key={ticker}>{ticker}: ${usdValue.toFixed(2)}</li>
               ))
             )}
           </ul>
