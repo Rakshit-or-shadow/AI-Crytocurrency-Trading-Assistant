@@ -39,9 +39,9 @@ const CompanyPage: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white p-6">
-      <h1 className="text-3xl font-bold mb-6 text-green-400">{crypto} Live Price</h1>
+      <h1 className="crytoHeading">{crypto} Live Price</h1>
 
-      {/* Dropdown to select update interval */}
+      {/* Dropdown to select update interval
       <select
         value={timeInterval}
         onChange={(e) => setTimeInterval(Number(e.target.value))}
@@ -52,17 +52,21 @@ const CompanyPage: React.FC = () => {
         <option value={60000}>1 Minute</option>
         <option value={120000}>2 Minutes</option>
         <option value={300000}>5 Minutes</option>
-      </select>
+      </select> */}
 
       {/* Live Price Graph */}
       <div className="w-full max-w-4xl mt-6">
         <LineChart width={900} height={400} data={priceHistory}>
-          <CartesianGrid strokeDasharray="3 3" stroke="gray" />
-          <XAxis dataKey="time" tick={{ fontSize: 12, fill: "white" }} stroke="white" />
-          <YAxis domain={yAxisRange ? yAxisRange : ["auto", "auto"]} tickFormatter={(value) => value.toFixed(2)} tick={{ fontSize: 12, fill: "white" }} stroke="white" />
-          <Tooltip formatter={(value) => value.toFixed(2)} contentStyle={{ backgroundColor: "black", borderColor: "green" }} />
-          <Line type="monotone" dataKey="price" stroke="#00ff99" strokeWidth={2} dot={{ fill: "#00ff99" }} />
+        <CartesianGrid strokeDasharray="3 3" stroke="gray" />
+          <XAxis dataKey="time" tick={{ fontSize: 12, fill: "black" }} stroke="black" />
+          <YAxis domain={yAxisRange ? yAxisRange : ["auto", "auto"]} tickFormatter={(value) => value.toFixed(2)} tick={{ fontSize: 12, fill: "black" }} stroke="black" />
+          <Tooltip formatter={(value) => value.toFixed(2)} contentStyle={{ backgroundColor: "black", borderColor: "black" }} />
+          <Line type="monotone" dataKey="price" stroke="#45ba8b" strokeWidth={2} dot={{ fill: "#ffffff" }} />
         </LineChart>
+
+        <button> BUY</button>
+        <button> SELL</button>
+        <button> STOP</button>
       </div>
     </div>
   );
