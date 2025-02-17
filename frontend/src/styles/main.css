@@ -1,20 +1,33 @@
+body {
+  background-color: #f6f2df;
+  color: #000000;
+}
+
+a {
+  color: #21754f;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #5e9076;
+}
+
 button {
-  background: rgba(30, 30, 30, 0.8) !important; /* Dark translucent background */
-  color: rgba(255, 255, 255, 0.85) !important; /* Off-white text */
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background-color: #58b785;
+  color: #ffffff;
   padding: 12px 24px;
   font-size: 1rem;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
   text-align: center;
-  backdrop-filter: blur(8px); /* Subtle Glassmorphism */
+  backdrop-filter: blur(8px);
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  border: none;
 }
 
 button:hover {
-  background: rgba(45, 45, 45, 0.9) !important; /* Darker on hover */
-  color: white;
+  background-color: #21754f;
   transform: scale(1.05);
   box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.5);
 }
