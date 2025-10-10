@@ -10,6 +10,7 @@ from transformers import pipeline  # For sentiment analysis
 import requests
 from datetime import datetime
 from rl_model import RLTrader
+#powerd by gemini-google
 
 
 class AITrader:
