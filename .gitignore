@@ -169,3 +169,26 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# --- Added during repo cleanup ---
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Secrets and local config (never commit these)
+.env
+.env.*
+!.env.example
+backend/app/config.json
+backend/app/src/config.json
+
+# Dependencies
+node_modules/
+venv/
+.venv/
+
+# Runtime output written by the AI trader
+backend/data/ai_trade_data.json
+
+# Local archives
+*.zip

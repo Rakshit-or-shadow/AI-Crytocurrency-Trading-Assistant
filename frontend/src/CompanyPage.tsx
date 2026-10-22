@@ -74,7 +74,6 @@ const CompanyPage: React.FC = () => {
   }, [cryptoParam, timeInterval]);
   
   // 1️⃣ Buy Crypto with Money
-  // filepath: /c:/Users/raksh/OneDrive/Documents/stock-market-simulator/frontend/src/CompanyPage.tsx
 const handleBuy = async () => {
   const trimmedAmount = buyAmount.trim();
   const money = parseFloat(trimmedAmount);

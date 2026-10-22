@@ -1,18 +1,21 @@
+import os
+import sys
+
+# Make the backend/ folder (settings.py, risk.py, ...) importable
+BACKEND_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+sys.path.insert(0, BACKEND_DIR)
+
 from fastapi import FastAPI, Request
 import uvicorn
-import json
-import os
 from coinbase.wallet.client import Client
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+import settings
 
-# Load API credentials from config.json
-config_path = os.path.join(os.path.dirname(__file__), "config.json")
-with open(config_path) as config_file:
-    config = json.load(config_file)
-
-api_key = config["api_key"]
-api_secret = config["api_secret"]
+# Load API credentials from environment variables (see backend/.env.example)
+api_key, api_secret = settings.get_coinbase_credentials()
+if not api_key:
+    print("Warning: COINBASE_API_KEY is not set. Price requests will fail until you set it.")
 
 # Initialize FastAPI app
 app = FastAPI()
@@ -20,7 +23,7 @@ app = FastAPI()
 # Add CORS Middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allows requests from frontend
+    allow_origins=settings.get_allowed_origins(),  # Websites allowed to call the API
     allow_credentials=True,
     allow_methods=["*"],  # Allows all HTTP methods
     allow_headers=["*"],  # Allows all headers

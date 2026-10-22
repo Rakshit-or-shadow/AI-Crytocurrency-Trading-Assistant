@@ -1,3 +1,5 @@
+import os
+import sys
 import time
 import json
 import threading
@@ -10,6 +12,10 @@ from transformers import pipeline  # For sentiment analysis
 import requests
 from datetime import datetime
 from rl_model import RLTrader
+
+# Make backend/settings.py importable
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
+import settings
 #powerd by gemini-google
 
 
@@ -18,7 +24,7 @@ class AITrader:
         self.client = Client(api_key, api_secret)
         self.trading_pair = trading_pair
         self.balance = 100000  # Starting balance in USD
-        self.shares = 0
+        self.coin_amount = 0
         self.price_history = []  # List to store price history
         self.trade_history = []  # List to store trade actions
         self.running = True
@@ -52,7 +58,11 @@ class AITrader:
     def fetch_news_sentiment(self):
         try:
             current_month = datetime.now().strftime("%Y-%m")
-            response = requests.get(f"https://newsapi.org/v2/everything?q={self.trading_pair}&from={current_month}-01&apiKey=821304adb6e94014bcf96da513164736")
+            news_api_key = settings.get_news_api_key()
+            if not news_api_key:
+                print("NEWS_API_KEY is not set, using a neutral sentiment score.")
+                return 0
+            response = requests.get(f"https://newsapi.org/v2/everything?q={self.trading_pair}&from={current_month}-01&apiKey={news_api_key}")
             articles = response.json().get('articles', [])
             print(f"Fetched {len(articles)} articles for sentiment analysis.")
             sentiments = []
@@ -73,7 +83,7 @@ class AITrader:
         current_price = self.fetch_current_price()
         if current_price is None:
             return self.balance
-        total_value = self.balance + self.shares * current_price
+        total_value = self.balance + self.coin_amount * current_price
         return total_value
 
     def save_trade_data(self):
@@ -81,7 +91,7 @@ class AITrader:
             "price_history": self.price_history,
             "trade_history": self.trade_history,
             "balance": self.balance,
-            "shares": self.shares,
+            "coin_amount": self.coin_amount,
             "total_value": self.calculate_total_value()
         }
         with open("trade_data.json", "w") as f:
@@ -125,7 +135,7 @@ class AITrader:
                     trade_amount_usd = self.balance * 0.05
                     trade_amount_btc = trade_amount_usd / current_price
                     if self.balance >= trade_amount_usd:
-                        self.shares += trade_amount_btc
+                        self.coin_amount += trade_amount_btc
                         self.balance -= trade_amount_usd
                         purchase_price = current_price  # Store buy price
                         self.trade_history.append(('buy', current_price, trade_amount_btc))
@@ -135,11 +145,11 @@ class AITrader:
                     self.last_trade_time = time.time()
                 # If already holding BTC, check if current price makes profit
                 elif current_price > purchase_price:
-                    # Sell all shares held
-                    trade_amount_btc = self.shares
+                    # Sell all coins held
+                    trade_amount_btc = self.coin_amount
                     trade_amount_usd = trade_amount_btc * current_price
                     if trade_amount_btc > 0:
-                        self.shares -= trade_amount_btc
+                        self.coin_amount -= trade_amount_btc
                         self.balance += trade_amount_usd
                         self.trade_history.append(('sell', current_price, trade_amount_btc))
                         print(f"Sell {trade_amount_btc:.4f} BTC at {current_price} USD")
@@ -207,11 +217,8 @@ if __name__ == "__main__":
     sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
     from utils import crypto_mapping
 
-    # Construct an absolute path to config.json located in backend/app
-    config_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "config.json"))
-    print(f"Looking for config at: {config_path}")
-    with open(config_path) as config_file:
-        config = json.load(config_file)
+    # Read the Coinbase credentials from environment variables (see backend/.env.example)
+    api_key, api_secret = settings.get_coinbase_credentials()
 
     # Print available cryptocurrencies from crypto_mapping
     print("Available cryptocurrencies:")
@@ -239,8 +246,8 @@ if __name__ == "__main__":
         print(f"Starting trader for {trading_pair}")
         
         trader = AITrader(
-            api_key=config['api_key'],
-            api_secret=config['api_secret'],
+            api_key=api_key,
+            api_secret=api_secret,
             trading_pair=trading_pair
         )
 
