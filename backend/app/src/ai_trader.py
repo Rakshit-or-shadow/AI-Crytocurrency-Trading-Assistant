@@ -72,6 +72,10 @@ def decide_action(rl_signal, sentiment_score, in_position, risk_exit):
         return "buy", (f"BUY: the RL model signals buy and news sentiment is {sentiment_text}, "
                        f"so it does not block the trade.")
 
+    if rl_signal == "buy" and in_position:
+        return "hold", "HOLD: the RL model signals buy, but we already hold coins, so nothing is added."
+    if rl_signal == "sell" and not in_position:
+        return "hold", "HOLD: the RL model signals sell, but we hold no coins, so there is nothing to sell."
     if rl_signal == "unavailable":
         return "hold", "HOLD: no trained RL model is available (run backtest.py to train one)."
     return "hold", (f"HOLD: RL signal is {rl_signal}, news sentiment is {sentiment_text}, "

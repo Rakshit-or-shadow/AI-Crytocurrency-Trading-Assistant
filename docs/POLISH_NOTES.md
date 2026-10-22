@@ -105,3 +105,38 @@ Test period: 2025-06-09 to 2026-10-21 (500 days). Start $10,000, 0.1% fee per tr
 **NOT VERIFIED: the Docker files.** Docker is not installed on the machine this was done on, so `docker compose up` was never run. Please run `docker compose up --build` once and tell me if anything breaks. The most likely trouble spots: the CPU-only PyTorch install line in `backend/Dockerfile`, and image size (TensorFlow + PyTorch are large).
 
 CI has also not run yet (it runs on GitHub after you push). I ran the same commands locally and they pass.
+
+## Phase 6 - README rewrite
+
+**What changed**: `README.md` fully rewritten (title, pitch, badges, demo placeholder, features, Mermaid architecture, stack, quick start for Docker and non-Docker, env var table, backtest table + chart, project structure, roadmap, disclaimer, license). The Day 1/Day 2 diary and the "not explicitly mentioned in the provided code" lines are gone. Every feature listed exists in the code; backtest numbers are copied from `backtest_results.json`.
+
+**Uncertain / to check**
+- The CI badge URL uses the current repo name (`AI-Crytocurrency-Trading-Assistant`). GitHub redirects after you rename, but update the badge URL to the new name afterwards.
+- `docs/demo.gif` does not exist yet (placeholder, see manual steps).
+- Small fix made in this commit: the AI trader's "hold" explanation was misleading when the RL model said buy while coins were already held; it now says so.
+
+## Phase 7 - Manual steps for Rakshit
+
+- [ ] **Rotate exposed keys first** (they are in public git history): the Coinbase API key + private key (`backend/app/config.json`) and the NewsAPI key (was hardcoded in `ai_trader.py`). Create new ones, put them in `backend/.env` (git-ignored), then delete the old keys in the Coinbase and NewsAPI dashboards. Optional: scrub history with `git filter-repo` (I did not rewrite history).
+- [ ] Record a short demo GIF (coin page -> start AI trader -> click a trade -> Backtest page) and save it as `docs/demo.gif`.
+- [ ] Fix the repo name typo "Crytocurrency" -> "Cryptocurrency" in GitHub Settings > General. Then update the CI badge URLs in `README.md`.
+- [ ] Update the repo About description, e.g. "Paper-trading crypto assistant: RL agent + news sentiment + risk rules, with backtesting. FastAPI, React, TensorFlow."
+- [ ] Add topics: `reinforcement-learning`, `fastapi`, `react`, `tensorflow`, `sentiment-analysis`, `crypto`.
+- [ ] Run `docker compose up --build` once (Docker files are untested, see Phase 5).
+- [ ] Deploy: frontend to Vercel (set `VITE_API_URL` to the backend URL), backend to Render (set `COINBASE_API_KEY`, `COINBASE_API_SECRET`, `NEWS_API_KEY`, and `ALLOWED_ORIGINS` to the Vercel URL). Add the live link to the README.
+- [ ] Optional cleanup I was not allowed to do: delete `backend/app/src/trade_data.json` (stale old-format sample) and `frontend/node_modules.zip` (I stopped tracking it and the folder `frontend/node_modules`, but left them on disk).
+- [ ] Optional: run `python backtest.py --seed 1` (and 2, 3) to see how much the RL results change between seeds.
+- [ ] Review the `polish` branch (`git diff main...polish`) and merge it. Nothing was pushed.
+
+## What to read first to understand the changes
+
+1. `backend/risk.py` - small and pure; the core risk rules.
+2. `backend/paper_account.py` - the buy/sell/balance logic.
+3. `backend/ma_crossover.py` - the simplest strategy.
+4. `backend/tests/test_risk.py`, `test_paper_account.py` - examples of how those behave.
+5. `backend/app/src/ai_trader.py` - `decide_action()` first, then `step()`.
+6. `backend/app/src/rl_model.py` - state, actions, training.
+7. `backend/backtest.py` - `run_backtest()` and `compute_metrics()`.
+8. `backend/app/utils.py` - API endpoints.
+9. `frontend/src/AITradingGraph.tsx`, `WhyPanel.tsx`, `BacktestPage.tsx`.
+10. `README.md`, `.github/workflows/ci.yml`, `docker-compose.yml`.
