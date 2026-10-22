@@ -28,3 +28,22 @@ History was NOT rewritten. **Rotate all three** (see manual steps). Removing the
 **Verify**: `cd backend/app && python -c "import utils"` works; `cd frontend && npm ci && npm run build` works.
 
 **Skipped / uncertain**: nothing. Docker is not installed on this machine, see Phase 5.
+
+## Phase 2 - Trading logic quality
+
+**What changed**
+- `backend/risk.py` (new): `RiskConfig` (defaults: risk 2% of the account per trade, 5% stop-loss, 10% take-profit, max 50% of the account in coins), `position_size_usd`, `stop_loss_price`, `take_profit_price`, `check_exit`.
+- `backend/paper_account.py` (new): the buy/sell/balance logic that used to be inline global variables in `utils.py`. Both the API and the AI trader now use it. Behaviour and messages are unchanged.
+- `backend/ma_crossover.py` (new): moving-average crossover baseline (10/30 day by default).
+- `backend/app/src/ai_trader.py` (rewritten): uses the risk module for sizing and exits, combines RL signal + news sentiment in `decide_action()`, and stores a plain-English `explanation` (sentiment score, RL signal, final action, risk numbers) with every trade. It can now be driven by the API (`step()`, `get_snapshot()`).
+- `backend/app/src/rl_model.py` (rewritten): action space is now 3 clear actions (hold/buy/sell) instead of the undefined 7; state is the last 10 daily price changes plus a "holding?" flag; fixed an indexing bug in `train()`; added `train_on_prices()`, save/load.
+- `backend/app/utils.py`: now uses `PaperAccount`; new endpoints `POST /ai/start/{coin}`, `POST /ai/stop`, `GET /ai-trading-history` (the frontend already called this URL but it did not exist), `GET /backtest/results`, `GET /backtest/chart`.
+
+**Decisions (ambiguous points)**
+- The old trader sold whenever price > buy price and bought 5% of the balance. Replaced by the risk rules above. Percentages are my defaults; change them in `RiskConfig`.
+- Random "market boom/crash" price events were mutating the price used for trading. They are now OFF by default (`simulate_events=False`) so paper results reflect the real market.
+- The RL model has no pre-trained weights in the repo. Until `python backtest.py` has been run, the live trader says "no trained RL model" and holds. It never fakes a signal.
+- News sentiment returns 0 (neutral) when `NEWS_API_KEY` is not set. It now reads at most 20 headlines (before: unlimited, one model call each).
+- Trade history format changed from tuples to dicts. The old sample file `backend/app/src/trade_data.json` is stale (old format, no longer written). I left it alone because I may only delete `.DS_Store`; you can delete it. New output goes to `backend/data/ai_trade_data.json` (git-ignored).
+
+**Verify**: `cd backend/app && python -c "import utils"`. The decision logic is covered by tests added in Phase 5.
