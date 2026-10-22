@@ -132,7 +132,7 @@ How to read this honestly:
 - The RL agent lost on BTC and gained on ETH. This is one random seed on one window, so it is not evidence of a real edge.
 - Daily closes only: no slippage, no intraday moves, stop-loss checked on the daily close.
 
-Full numbers and equity curves are in [`backtest_results.json`](backtest_results.json). More detail in [`docs/POLISH_NOTES.md`](docs/POLISH_NOTES.md).
+Full numbers and equity curves are in [`backtest_results.json`](backtest_results.json).
 
 ## Project structure
 

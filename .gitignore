@@ -192,3 +192,8 @@ backend/data/ai_trade_data.json
 
 # Local archives
 *.zip
+
+# Personal notes and stale files (hidden from the public repo)
+docs/POLISH_NOTES.md
+backend/app/src/trade_data.json
+frontend/README.md
