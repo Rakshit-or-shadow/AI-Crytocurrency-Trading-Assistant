@@ -1,21 +1,21 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "./styles/Extras.css";
+import { GITHUB_URL } from "./config";
 
-// Shown at the bottom of every page
-const Footer: React.FC = () => {
-  return (
-    <footer className="site-footer">
-      <p className="paper-label">Paper trading - simulated money</p>
+// Footer for the app screens. The landing page has its own larger close.
+const Footer: React.FC = () => (
+  <footer className="app-footer">
+    <div className="app-footer-inner">
       <p>
-        Educational project only. Nothing here is financial advice. No real orders are placed
-        and no real money is used.
+        <strong>Not financial advice.</strong> Trading crypto carries risk. Paper trading only:
+        balances are simulated and no real orders are placed.
       </p>
       <p>
-        <Link to="/welcome">Coins</Link> | <Link to="/backtest">Backtest results</Link>
+        <Link to="/app">Markets</Link> · <Link to="/backtest">Backtest</Link> ·{" "}
+        <a href={GITHUB_URL} target="_blank" rel="noreferrer">GitHub</a>
       </p>
-    </footer>
-  );
-};
+    </div>
+  </footer>
+);
 
 export default Footer;

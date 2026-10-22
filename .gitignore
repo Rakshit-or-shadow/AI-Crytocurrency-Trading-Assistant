@@ -197,3 +197,16 @@ backend/data/ai_trade_data.json
 docs/POLISH_NOTES.md
 backend/app/src/trade_data.json
 frontend/README.md
+# Playwright CLI output (may contain credentials)
+.playwright-cli/
+
+# Design reference material (not committed)
+reference/
+
+# Agent skills installed locally
+.agents/
+.claude/
+skills-lock.json
+frontend/dist/
+.taste-skill/
+.vite.log
