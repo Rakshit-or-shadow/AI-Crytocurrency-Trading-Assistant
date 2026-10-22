@@ -1,4 +1,5 @@
 import React from "react";
+import RiskNote from "./components/RiskNote";
 
 // One trade made by the AI, as sent by the backend
 export interface AITrade {
@@ -35,34 +36,39 @@ const WhyPanel: React.FC<Props> = ({ trades, lastDecision, selectedTrade, onSele
   const shown = selectedTrade ?? lastDecision;
 
   return (
-    <div className="why-panel">
-      <h3>Why did the AI do this?</h3>
+    <section className="why" aria-labelledby="why-title">
+      <h3 id="why-title">Why did the AI do this?</h3>
 
       {shown ? (
-        <div className="why-detail">
-          <p>
-            <strong>{shown.action.toUpperCase()}</strong> at ${shown.price.toFixed(2)}
-            <span className="why-time"> ({shown.time.replace("T", " ")})</span>
+        <div className="why-card">
+          <p className="headline">
+            <span className={shown.action === "buy" ? "act-buy" : shown.action === "sell" ? "act-sell" : ""}>
+              {shown.action.toUpperCase()}
+            </span>{" "}
+            at ${shown.price.toFixed(2)}
+            <span className="when">{shown.time.replace("T", " ")}</span>
           </p>
-          <ul>
-            <li>RL model signal: <strong>{shown.rl_signal}</strong></li>
-            <li>News sentiment score: <strong>{shown.sentiment_score}</strong></li>
-            <li>Final action: <strong>{shown.action}</strong></li>
+          <ul className="kv">
+            <li><span className="label">RL model signal</span><span className="value">{shown.rl_signal}</span></li>
+            <li><span className="label">News sentiment score</span><span className="value">{shown.sentiment_score}</span></li>
+            <li><span className="label">Final action</span><span className="value">{shown.action}</span></li>
           </ul>
           <p className="why-explanation">{shown.explanation}</p>
+          <RiskNote>This is a simulated decision, not a recommendation.</RiskNote>
         </div>
       ) : (
-        <p>No decisions yet. The AI decides every 20 seconds once it is running.</p>
+        <p className="muted">No decisions yet. The AI decides every 20 seconds once it is running.</p>
       )}
 
       {trades.length > 0 && (
-        <>
-          <h4>Click a trade to see its explanation</h4>
+        <div>
+          <h4 className="panel-note" style={{ marginBottom: 8 }}>Select a trade to read its explanation</h4>
           <ul className="trade-list">
             {[...trades].reverse().map((trade) => (
               <li key={trade.time + trade.action}>
                 <button
-                  className={trade.action === "buy" ? "trade-buy" : "trade-sell"}
+                  className={trade.action === "buy" ? "t-buy" : "t-sell"}
+                  aria-pressed={selectedTrade?.time === trade.time && selectedTrade?.action === trade.action}
                   onClick={() => onSelectTrade(trade)}
                 >
                   {trade.action.toUpperCase()} {trade.quantity.toFixed(4)} @ ${trade.price.toFixed(2)}
@@ -70,9 +76,9 @@ const WhyPanel: React.FC<Props> = ({ trades, lastDecision, selectedTrade, onSele
               </li>
             ))}
           </ul>
-        </>
+        </div>
       )}
-    </div>
+    </section>
   );
 };
 
