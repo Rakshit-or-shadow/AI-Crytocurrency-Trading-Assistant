@@ -18,8 +18,5 @@ const StartPage: React.FC = () => {
     </div>
   );
 };
-<style>
-  
-</style>
 export default StartPage;
 

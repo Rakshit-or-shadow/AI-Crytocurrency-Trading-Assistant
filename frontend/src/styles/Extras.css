@@ -1,0 +1,135 @@
+/* Styles for the footer, paper-trading label, AI panel and backtest page */
+
+.paper-label {
+  display: inline-block;
+  margin: 4px 0;
+  padding: 4px 12px;
+  border: 1px solid #f1c40f;
+  border-radius: 999px;
+  color: #f1c40f;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.site-footer {
+  width: 100%;
+  margin-top: 60px;
+  padding: 20px 16px;
+  text-align: center;
+  color: #b0b7c3;
+  font-size: 0.85rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.site-footer a,
+.backtest-page a {
+  color: #45ba8b;
+}
+
+.notice {
+  max-width: 900px;
+  padding: 10px 14px;
+  border-left: 4px solid #f1c40f;
+  background: rgba(241, 196, 15, 0.1);
+  color: #ffffff;
+}
+
+/* AI trader controls and explanation panel */
+.ai-controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  margin: 12px 0;
+}
+
+.ai-controls button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.why-panel {
+  width: 900px;
+  max-width: 100%;
+  margin: 20px auto 0;
+  padding: 16px 20px;
+  text-align: left;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+}
+
+.why-time {
+  color: #b0b7c3;
+  font-size: 0.85rem;
+}
+
+.why-explanation {
+  padding: 10px 14px;
+  background: rgba(69, 186, 139, 0.12);
+  border-radius: 8px;
+  line-height: 1.5;
+}
+
+.trade-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.trade-list button {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+}
+
+.trade-buy {
+  border-color: #2ecc71 !important;
+}
+
+.trade-sell {
+  border-color: #e74c3c !important;
+}
+
+/* Backtest page */
+.backtest-page {
+  width: 95%;
+  max-width: 960px;
+  margin: 40px auto 0;
+  color: #ffffff;
+  text-align: center;
+}
+
+.backtest-section {
+  margin-top: 40px;
+}
+
+.backtest-table {
+  margin: 16px auto;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.backtest-table th,
+.backtest-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  text-align: right;
+}
+
+.backtest-table th:first-child,
+.backtest-table td:first-child {
+  text-align: left;
+}
+
+.disclaimer-small {
+  color: #b0b7c3;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 700px) {
+  .backtest-table {
+    font-size: 0.8rem;
+  }
+}

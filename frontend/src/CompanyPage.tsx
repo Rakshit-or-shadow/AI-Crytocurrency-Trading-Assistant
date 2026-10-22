@@ -1,9 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import TradingGraph from "./AITradingGraph";
+import { API_URL } from "./config";
 import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
-import "./styles/CompanyPage.css"; 
+import "./styles/CompanyPage.css";
+import "./styles/Extras.css";
 // import "./styles/main.css";
+
+// What /analytics/{crypto} returns (or an error message)
+interface Analytics {
+  error?: string;
+  price_change_24h?: number;
+  high_24h?: number;
+  low_24h?: number;
+  volume_24h?: string;
+  volatility?: string;
+}
 
 const CompanyPage: React.FC = () => {
   const { crypto } = useParams<{ crypto: string }>();
@@ -22,13 +34,13 @@ const CompanyPage: React.FC = () => {
     user_budget: 250000,
     portfolio: {}
   });
-  const [statisticalAnalysis, setStatisticalAnalysis] = useState<any>(null);
+  const [statisticalAnalysis, setStatisticalAnalysis] = useState<Analytics | null>(null);
   
   // Fetch current portfolio periodically (every 4 sec)
   useEffect(() => {
     const fetchPortfolio = async () => {
       try {
-        const response = await fetch("http://localhost:8000/portfolio");
+        const response = await fetch(`${API_URL}/portfolio`);
         const data = await response.json();
         setPortfolio(data);
       } catch (error) {
@@ -44,7 +56,7 @@ const CompanyPage: React.FC = () => {
   useEffect(() => {
     const fetchPrice = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/price/${cryptoParam}`);
+        const response = await fetch(`${API_URL}/price/${cryptoParam}`);
         const data = await response.json();
         if (data.price !== null) {
           setPriceHistory((prev) => {
@@ -88,7 +100,7 @@ const handleBuy = async () => {
     return;
   }
   try {
-    const response = await fetch(`http://localhost:8000/buy/${cryptoParam}`, {
+    const response = await fetch(`${API_URL}/buy/${cryptoParam}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ money: money }),
@@ -118,7 +130,7 @@ const handleBuy = async () => {
     // Convert the USD amount to crypto quantity
     const coinQtyToSell = moneyToSell / currentPrice;
     try {
-      const response = await fetch(`http://localhost:8000/sell/${cryptoParam}`, {
+      const response = await fetch(`${API_URL}/sell/${cryptoParam}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         // Send the calculated coin quantity for the sell order
@@ -135,7 +147,7 @@ const handleBuy = async () => {
   // 3️⃣ Reset Portfolio
   const handleReset = async () => {
     try {
-      const response = await fetch("http://localhost:8000/reset", {
+      const response = await fetch(`${API_URL}/reset`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
       });
@@ -151,7 +163,7 @@ const handleBuy = async () => {
   useEffect(() => {
     const fetchStatisticalAnalysis = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/analytics/${cryptoParam}`);
+        const response = await fetch(`${API_URL}/analytics/${cryptoParam}`);
         const data = await response.json();
         setStatisticalAnalysis(data);
       } catch (error) {
@@ -179,7 +191,7 @@ const handleBuy = async () => {
       <ul>
         <li>
           <strong>Price Change (24h):</strong> 
-          <span className={statisticalAnalysis.price_change_24h >= 0 ? "price-change-positive" : "price-change-negative"}>
+          <span className={(statisticalAnalysis.price_change_24h ?? 0) >= 0 ? "price-change-positive" : "price-change-negative"}>
             ${statisticalAnalysis.price_change_24h}
           </span>
         </li>
@@ -214,6 +226,7 @@ const handleBuy = async () => {
       {/* Middle Column: Graph (UNCHANGED) */}
       <div className="middle-column">
         <h1 className="crypto-heading">{cryptoParam} Live Price</h1>
+        <p className="paper-label">Paper trading - simulated money</p>
         <div className="chart-container">
         <LineChart width={900} height={400} data={priceHistory}>
             <CartesianGrid strokeDasharray="3 3" stroke="gray" />
@@ -291,11 +304,11 @@ const handleBuy = async () => {
 </div>
 {showAITrading && (
   <div className="ai-trading-section">
-    <TradingGraph />
+    <TradingGraph crypto={cryptoParam} />
   </div>
 )}
 <button className="toggle-ai-trading-button" onClick={() => setShowAITrading(!showAITrading)}>
-  {showAITrading ? "Hide AI Trading" : "Watch the AI bot trade "}
+  {showAITrading ? "Hide AI Trading" : "Watch the AI bot paper trade"}
 </button>
 </div>
 

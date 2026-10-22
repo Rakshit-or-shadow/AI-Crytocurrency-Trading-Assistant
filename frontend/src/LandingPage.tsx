@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import "./styles/LandingPage.css"; 
 import "./styles/main.css";
 
@@ -24,6 +24,9 @@ const LandingPage: React.FC = () => {
           </button>
         ))}
       </div>
+      <p>
+        <Link to="/backtest">See the backtest results</Link>
+      </p>
     </div>
   );
 };
