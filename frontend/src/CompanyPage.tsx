@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import TradingGraph from "./AITradingGraph";
 import { API_URL } from "./config";
-import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
-import "./styles/CompanyPage.css";
-import "./styles/Extras.css";
-// import "./styles/main.css";
+import PriceChart from "./components/PriceChart";
+import RiskNote from "./components/RiskNote";
+import SiteNav from "./components/SiteNav";
+import { usd, signedUsd } from "./lib/format";
 
 // What /analytics/{crypto} returns (or an error message)
 interface Analytics {
@@ -22,20 +22,19 @@ const CompanyPage: React.FC = () => {
   // Use crypto parameter if available, else default to "Bitcoin"
   const cryptoParam = crypto ? crypto : "Bitcoin";
 
-  const [timeInterval] = useState(4000);  // 4 sec by default
+  const [timeInterval] = useState(4000); // 4 sec by default
   const [priceHistory, setPriceHistory] = useState<{ time: string; price: number }[]>([]);
   const [yAxisRange, setYAxisRange] = useState<[number, number] | undefined>(undefined);
   const [message, setMessage] = useState(""); // For status messages
 
-  // New States:
   const [buyAmount, setBuyAmount] = useState("");
   const [sellAmount, setSellAmount] = useState("");
   const [portfolio, setPortfolio] = useState<{ user_budget: number; portfolio: { [key: string]: number } }>({
     user_budget: 250000,
-    portfolio: {}
+    portfolio: {},
   });
   const [statisticalAnalysis, setStatisticalAnalysis] = useState<Analytics | null>(null);
-  
+
   // Fetch current portfolio periodically (every 4 sec)
   useEffect(() => {
     const fetchPortfolio = async () => {
@@ -62,7 +61,7 @@ const CompanyPage: React.FC = () => {
           setPriceHistory((prev) => {
             const updatedHistory = [
               ...prev.slice(-15),
-              { time: new Date().toLocaleTimeString(), price: data.price }
+              { time: new Date().toLocaleTimeString(), price: data.price },
             ];
 
             // Set Y-axis range based on the first price received
@@ -84,36 +83,36 @@ const CompanyPage: React.FC = () => {
     const priceInterval = setInterval(fetchPrice, timeInterval);
     return () => clearInterval(priceInterval); // Cleanup on unmount
   }, [cryptoParam, timeInterval]);
-  
-  // 1️⃣ Buy Crypto with Money
-const handleBuy = async () => {
-  const trimmedAmount = buyAmount.trim();
-  const money = parseFloat(trimmedAmount);
-  if (!trimmedAmount || isNaN(money) || money <= 0) {
-    setMessage("Please enter a valid investment amount.");
-    return;
-  }
-  const currentPrice =
-    priceHistory.length > 0 ? priceHistory[priceHistory.length - 1].price : null;
-  if (!currentPrice) {
-    setMessage("Current price unavailable. Try again.");
-    return;
-  }
-  try {
-    const response = await fetch(`${API_URL}/buy/${cryptoParam}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ money: money }),
-    });
-    const result = await response.json();
-    setMessage(result.message || "Buy order placed!");
-  } catch (error) {
-    console.error("Error buying:", error);
-    setMessage("Error placing buy order.");
-  }
-};
 
-  // 2️⃣ Sell Crypto with Money
+  // 1. Buy crypto with money
+  const handleBuy = async () => {
+    const trimmedAmount = buyAmount.trim();
+    const money = parseFloat(trimmedAmount);
+    if (!trimmedAmount || isNaN(money) || money <= 0) {
+      setMessage("Please enter a valid investment amount.");
+      return;
+    }
+    const currentPrice =
+      priceHistory.length > 0 ? priceHistory[priceHistory.length - 1].price : null;
+    if (!currentPrice) {
+      setMessage("Current price unavailable. Try again.");
+      return;
+    }
+    try {
+      const response = await fetch(`${API_URL}/buy/${cryptoParam}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ money: money }),
+      });
+      const result = await response.json();
+      setMessage(result.message || "Buy order placed!");
+    } catch (error) {
+      console.error("Error buying:", error);
+      setMessage("Error placing buy order.");
+    }
+  };
+
+  // 2. Sell crypto with money
   const handleSell = async () => {
     const trimmedSell = sellAmount.trim();
     const moneyToSell = parseFloat(trimmedSell);
@@ -144,7 +143,7 @@ const handleBuy = async () => {
     }
   };
 
-  // 3️⃣ Reset Portfolio
+  // 3. Reset portfolio
   const handleReset = async () => {
     try {
       const response = await fetch(`${API_URL}/reset`, {
@@ -177,151 +176,160 @@ const handleBuy = async () => {
 
   const [showAITrading, setShowAITrading] = useState(false);
 
+  const currentPrice = priceHistory.length > 0 ? priceHistory[priceHistory.length - 1].price : null;
+  const change = statisticalAnalysis?.price_change_24h;
 
-
-  // ...existing JSX...
   return (
-    <div className="main-container">
-<div className="left-container">
-  <h2>Statistical Analysis</h2>
-  {statisticalAnalysis ? (
-    statisticalAnalysis.error ? (
-      <p>{statisticalAnalysis.error}</p>
-    ) : (
-      <ul>
-        <li>
-          <strong>Price Change (24h):</strong> 
-          <span className={(statisticalAnalysis.price_change_24h ?? 0) >= 0 ? "price-change-positive" : "price-change-negative"}>
-            ${statisticalAnalysis.price_change_24h}
-          </span>
-        </li>
-        <li>
-          <strong>High (24h):</strong> 
-          <span className="high-value">${statisticalAnalysis.high_24h}</span>
-        </li>
-        <li>
-          <strong>Low (24h):</strong> 
-          <span className="low-value">${statisticalAnalysis.low_24h}</span>
-        </li>
-        <li>
-          <strong>Volume (24h):</strong> {statisticalAnalysis.volume_24h}
-        </li>
-        <li>
-          <strong>Market Status:</strong> 
-          <span className={statisticalAnalysis.volatility === "✅ Stable Market" ? "market-status-green" : "market-status-red"}>
-            {statisticalAnalysis.volatility}
-          </span>
-        </li>
-      </ul>
-    )
-  ) : (
-    <p>Loading...</p>
-  )}
-</div>
-
-
-
-
-      <div className="right-container">
-      {/* Middle Column: Graph (UNCHANGED) */}
-      <div className="middle-column">
-        <h1 className="crypto-heading">{cryptoParam} Live Price</h1>
-        <p className="paper-label">Paper trading - simulated money</p>
-        <div className="chart-container">
-        <LineChart width={900} height={400} data={priceHistory}>
-            <CartesianGrid strokeDasharray="3 3" stroke="gray" />
-            <XAxis dataKey="time" tick={{ fontSize: 12, fill: "white" }} stroke="white" />
-            <YAxis domain={yAxisRange ? yAxisRange : ["auto", "auto"]} tickFormatter={(value) => value.toFixed(2)} tick={{ fontSize: 12, fill: "white" }} stroke="white" />
-            <Tooltip formatter={(value) => typeof value === 'number' ? value.toFixed(2) : value} contentStyle={{ backgroundColor: "white", borderColor: "white" }} />
-            <Line type="monotone" dataKey="price" stroke="#45ba8b" strokeWidth={2} dot={{ fill: "#ffffff" }} />
-          </LineChart>
+    <div className="app">
+      <SiteNav variant="app" />
+      <main className="app-main" id="main">
+        <div className="page-head">
+          <p className="crumbs"><Link to="/app">Markets</Link> / {cryptoParam}</p>
+          <h1>{cryptoParam}</h1>
+          <div className="price-now">
+            <span className="figure">{currentPrice !== null ? usd(currentPrice) : "Loading price"}</span>
+            {change !== undefined && (
+              <span className={change >= 0 ? "up" : "down"}>{signedUsd(change)} in 24 hours</span>
+            )}
+          </div>
+          <p className="notice">
+            <strong>Paper trading.</strong> All balances are simulated. Not financial advice. Trading crypto carries risk.
+          </p>
         </div>
-      </div>
-  
-    {/* Bottom Section: Full-Width, Same as Chart */}
-{/* Bottom Section: Full-Width, Same as Chart */}
-<div className="bottom-container">
-  <div className="bottom-columns">
 
-    {/* Left Column: Wallet Info */}
-    <div className="wallet-container">
-      <div className="balance">
-        <h3>Balance</h3>
-        <p>${portfolio.user_budget.toFixed(2)}</p>
-      </div>
-      <div className="wallet-info">
-        <h3>Holdings:</h3>
-        <ul>
-          {Object.keys(portfolio.portfolio).length === 0 ? (
-            <li>None</li>
-          ) : (
-            Object.entries(portfolio.portfolio).map(([ticker, usdValue]) => (
-              <li key={ticker}>{ticker}: ${usdValue.toFixed(2)}</li>
-            ))
-          )}
-        </ul>
-      </div>
+        <div className="app-grid">
+          <div className="stack">
+            <section className="panel" aria-labelledby="live-title">
+              <div className="panel-head">
+                <h2 id="live-title">Live price</h2>
+                <span className="panel-note">Updates every 4 seconds</span>
+              </div>
+              {priceHistory.length === 0 ? (
+                <p className="chart-empty">Waiting for the first price from the backend.</p>
+              ) : (
+                <PriceChart
+                  data={priceHistory}
+                  yDomain={yAxisRange}
+                  label={`${cryptoParam} live price in US dollars`}
+                />
+              )}
+            </section>
+
+            <section className="panel" aria-labelledby="ai-title">
+              <div className="panel-head">
+                <h2 id="ai-title">AI paper trader</h2>
+                <span className="panel-note">Explains every decision</span>
+              </div>
+              <p className="muted">
+                A reinforcement-learning model, news sentiment and risk rules decide when to buy and
+                sell with simulated money.
+              </p>
+              <button
+                className="btn btn-secondary ai-toggle"
+                aria-expanded={showAITrading}
+                aria-controls="ai-section"
+                onClick={() => setShowAITrading(!showAITrading)}
+              >
+                {showAITrading ? "Hide the AI trader" : "Watch the AI bot paper trade"}
+                <span aria-hidden="true">{showAITrading ? "−" : "+"}</span>
+              </button>
+              {showAITrading && (
+                <div className="ai-wrap" id="ai-section">
+                  <TradingGraph crypto={cryptoParam} />
+                </div>
+              )}
+            </section>
+          </div>
+
+          <div className="stack side-first">
+            <section className="panel" aria-labelledby="stats-title">
+              <h2 id="stats-title">24-hour statistics</h2>
+              {statisticalAnalysis ? (
+                statisticalAnalysis.error ? (
+                  <p className="muted">{statisticalAnalysis.error}</p>
+                ) : (
+                  <ul className="kv">
+                    <li>
+                      <span className="label">Price change</span>
+                      <span className={`value ${(statisticalAnalysis.price_change_24h ?? 0) >= 0 ? "up" : "down"}`}>
+                        {signedUsd(statisticalAnalysis.price_change_24h ?? 0)}
+                      </span>
+                    </li>
+                    <li><span className="label">High</span><span className="value">${statisticalAnalysis.high_24h}</span></li>
+                    <li><span className="label">Low</span><span className="value">${statisticalAnalysis.low_24h}</span></li>
+                    <li><span className="label">Volume</span><span className="value">{statisticalAnalysis.volume_24h}</span></li>
+                    <li><span className="label">Market status</span><span className="value">{statisticalAnalysis.volatility}</span></li>
+                  </ul>
+                )
+              ) : (
+                <p className="muted">Loading statistics.</p>
+              )}
+            </section>
+
+            <section className="panel" aria-labelledby="wallet-title">
+              <h2 id="wallet-title">Paper wallet</h2>
+              <p className="balance-figure">{usd(portfolio.user_budget)}</p>
+              <p className="panel-note" style={{ marginBottom: 12 }}>Simulated cash balance</p>
+              <ul className="kv" aria-label="Holdings">
+                {Object.keys(portfolio.portfolio).length === 0 ? (
+                  <li><span className="label">Holdings</span><span className="value">None</span></li>
+                ) : (
+                  Object.entries(portfolio.portfolio).map(([ticker, usdValue]) => (
+                    <li key={ticker}><span className="label">{ticker}</span><span className="value">{usd(usdValue)}</span></li>
+                  ))
+                )}
+              </ul>
+            </section>
+
+            <section className="panel" aria-labelledby="trade-title">
+              <h2 id="trade-title">Buy or sell</h2>
+              <div className="trade-form">
+                <div className="field">
+                  <label htmlFor="buy-amount">Buy amount (USD)</label>
+                  <div className="field-row">
+                    <input
+                      id="buy-amount"
+                      name="buy-amount"
+                      autoComplete="off"
+                      type="number"
+                      inputMode="decimal"
+                      placeholder="0.00"
+                      value={buyAmount}
+                      onChange={(e) => setBuyAmount(e.target.value)}
+                    />
+                    <button className="btn btn-buy" onClick={handleBuy}>Buy</button>
+                  </div>
+                </div>
+                <div className="field">
+                  <label htmlFor="sell-amount">Sell amount (USD)</label>
+                  <div className="field-row">
+                    <input
+                      id="sell-amount"
+                      name="sell-amount"
+                      autoComplete="off"
+                      type="number"
+                      inputMode="decimal"
+                      placeholder="0.00"
+                      value={sellAmount}
+                      onChange={(e) => setSellAmount(e.target.value)}
+                    />
+                    <button className="btn btn-sell" onClick={handleSell}>Sell</button>
+                  </div>
+                </div>
+                <div className="form-foot">
+                  <button className="btn btn-secondary" onClick={handleReset}>Reset portfolio</button>
+                </div>
+              </div>
+              {message && <p className="status-message" role="status">{message}</p>}
+              <div style={{ marginTop: 16 }}>
+                <RiskNote />
+              </div>
+            </section>
+          </div>
+        </div>
+      </main>
     </div>
-
-    {/* Right Column: Buy/Sell & Reset Portfolio */}
-    <div className="trading-container">
-      <div className="trading-box">
-        <h2 className="sidebar-title">BUY / SELL</h2>
-
-        {/* Buy Section */}
-        <div className="trade-input">
-          <input 
-            type="number"
-            placeholder="Investment Amount (USD)"
-            value={buyAmount}
-            onChange={(e) => setBuyAmount(e.target.value)}
-          />
-          <button className="buy-button" onClick={handleBuy}>BUY</button>
-        </div>
-
-        {/* Sell Section */}
-        <div className="trade-input">
-          <input 
-            type="number"
-            placeholder="Sell Amount (USD)"
-            value={sellAmount}
-            onChange={(e) => setSellAmount(e.target.value)}
-          />
-          <button className="sell-button" onClick={handleSell}>SELL</button>
-        </div>
-
-        {/* Reset Portfolio */}
-        <div className="reset-container">
-          <button className="reset-button" onClick={handleReset}>RESET PORTFOLIO</button>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  {/* Status Message */}
-  {message && <p className="status-message">{message}</p>}
-</div>
-{showAITrading && (
-  <div className="ai-trading-section">
-    <TradingGraph crypto={cryptoParam} />
-  </div>
-)}
-<button className="toggle-ai-trading-button" onClick={() => setShowAITrading(!showAITrading)}>
-  {showAITrading ? "Hide AI Trading" : "Watch the AI bot paper trade"}
-</button>
-</div>
-
-    </div>
-    
-  )
-  
-  
-  ;
-
-
-  
-  ;
+  );
 };
 
 export default CompanyPage;

@@ -1,0 +1,31 @@
+/* Design tokens. Source of truth: DESIGN.md at the repo root. */
+:root {
+  --ground: #0c1013;
+  --surface: #131a1e;
+  --raised: #1b242a;
+  --border: #2a353c;
+  --border-input: #6a7a82;
+  --ink: #edf2f1;
+  --ink-muted: #a4b1b5;
+  --signal: #55c2e8;
+  --signal-hover: #7dd2f0;
+  --signal-ink: #06222d;
+  --amber: #f0b44c;
+  --up: #5cc49a;
+  --down: #eb7a72;
+
+  --font: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --margin: clamp(16px, 4vw, 56px);
+  --radius-control: 8px;
+  --radius-panel: 10px;
+
+  --step-display: clamp(3.5rem, 15vw, 14rem);
+  --step-statement: clamp(2.25rem, 5.4vw, 5rem);
+  --step-heading: clamp(1.75rem, 3vw, 2.5rem);
+  --step-lead: clamp(1.125rem, 1.4vw, 1.375rem);
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  color-scheme: dark;
+}

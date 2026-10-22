@@ -109,7 +109,7 @@ python backtest.py        # about 10 minutes on a CPU, mostly RL training
 | `COINBASE_API_SECRET` | backend | for live prices | Coinbase API private key |
 | `NEWS_API_KEY` | backend | no | NewsAPI key; without it the sentiment score is 0 |
 | `ALLOWED_ORIGINS` | backend | no | Comma-separated websites allowed to call the API (default `http://localhost:5173`) |
-| `VITE_API_URL` | frontend | no | Backend address (default `http://localhost:8000`) |
+| `VITE_API_URL` | frontend | yes (set in `frontend/.env`, or in Vercel) | Backend address, no trailing slash, e.g. `http://localhost:8000` |
 
 ## Backtest results
 
@@ -175,3 +175,13 @@ This project is for education only and is **not financial advice**. It uses simu
 ## License
 
 [MIT](LICENSE) © Rakshit Singh
+
+## Deploying the frontend on Vercel
+
+The frontend (`frontend/`) deploys to Vercel; the FastAPI backend is hosted separately.
+
+1. Import the repo in Vercel and set **Root Directory** to `frontend` (Vite is detected; `frontend/vercel.json` adds the single-page-app rewrite).
+2. Add the environment variable `VITE_API_URL` = your backend's public `https://` URL (no trailing slash), then deploy.
+3. On the backend, add the Vercel domain to `ALLOWED_ORIGINS` (comma-separated, no trailing slash), then restart it.
+
+The visual identity is documented in [DESIGN.md](DESIGN.md).

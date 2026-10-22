@@ -1,18 +1,10 @@
 import React, { useEffect, useState } from "react";
-import {
-  ComposedChart,
-  Line,
-  Scatter,
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
-  Legend,
-} from "recharts";
 import { API_URL } from "./config";
+import PriceChart from "./components/PriceChart";
+import type { PricePoint } from "./components/PriceChart";
+import RiskNote from "./components/RiskNote";
 import WhyPanel from "./WhyPanel";
 import type { AITrade, AIDecision } from "./WhyPanel";
-import "./styles/Extras.css";
 
 // What the backend sends from /ai-trading-history
 interface AIHistory {
@@ -25,14 +17,6 @@ interface AIHistory {
   price_history: { time: string; price: number }[];
   trades: AITrade[];
   last_decision: AIDecision | null;
-}
-
-// One point on the chart: the price, plus a marker value if the AI traded at that moment
-interface ChartPoint {
-  time: string;
-  price: number;
-  buy?: number;
-  sell?: number;
 }
 
 interface Props {
@@ -80,8 +64,8 @@ const AITradingGraph: React.FC<Props> = ({ crypto }) => {
   };
 
   // Build the chart data: copy each price point and add a buy/sell marker where a trade happened
-  const chartData: ChartPoint[] = (history?.price_history ?? []).map((point) => {
-    const chartPoint: ChartPoint = { time: point.time, price: point.price };
+  const chartData: PricePoint[] = (history?.price_history ?? []).map((point) => {
+    const chartPoint: PricePoint = { time: point.time, price: point.price };
     for (const trade of history?.trades ?? []) {
       if (trade.time === point.time) {
         if (trade.action === "buy") chartPoint.buy = point.price;
@@ -96,45 +80,45 @@ const AITradingGraph: React.FC<Props> = ({ crypto }) => {
 
   return (
     <div className="ai-trading-graph">
-      <h2>AI Trading History</h2>
-      <p className="paper-label">Paper trading - simulated money</p>
+      <div className="panel-head">
+        <h3>Live session</h3>
+        <span className="panel-note">Paper trading, simulated money</span>
+      </div>
 
       <div className="ai-controls">
-        <button onClick={startAI} disabled={history?.running}>Start AI trader</button>
-        <button onClick={stopAI} disabled={!history?.running}>Stop</button>
-        <span>{history?.running ? "Running" : "Stopped"}</span>
+        <button className="btn btn-primary" onClick={startAI} disabled={history?.running}>Start AI trader</button>
+        <button className="btn btn-secondary" onClick={stopAI} disabled={!history?.running}>Stop</button>
+        <span className="state-text" data-running={history?.running ? "true" : "false"} role="status">
+          {history?.running ? "Running" : "Stopped"}
+        </span>
       </div>
-      {message && <p className="status-message">{message}</p>}
+      {message && <p className="status-message" role="status">{message}</p>}
 
-      {history && history.rl_model_loaded === false && history.running && (
-        <p className="notice">
-          No trained RL model found, so the AI only holds. Run <code>python backtest.py</code> in
-          the backend folder to train one.
-        </p>
-      )}
+      <div className="notice-stack">
+        <RiskNote>Markers on the chart are the simulated AI's trades. They are not signals to copy.</RiskNote>
+        {history && history.rl_model_loaded === false && history.running && (
+          <p className="notice" role="status">
+            <strong>No trained model.</strong> The AI only holds. Run <code>python backtest.py</code> in
+            the backend folder to train one.
+          </p>
+        )}
+      </div>
 
       {chartData.length === 0 ? (
-        <p>No data yet. Start the AI trader and wait a few seconds for prices to arrive.</p>
+        <p className="chart-empty">No data yet. Start the AI trader and wait a few seconds for prices to arrive.</p>
       ) : (
-        <ComposedChart width={900} height={400} data={chartData}>
-          <CartesianGrid strokeDasharray="3 3" stroke="gray" />
-          <XAxis dataKey="time" tickFormatter={formatTime} tick={{ fontSize: 12, fill: "white" }} stroke="white" />
-          <YAxis
-            domain={["auto", "auto"]}
-            tickFormatter={(value) => value.toFixed(2)}
-            tick={{ fontSize: 12, fill: "white" }}
-            stroke="white"
+        <>
+          <PriceChart
+            data={chartData}
+            markers
+            formatTime={formatTime}
+            label={`${crypto} price with AI buy and sell markers`}
           />
-          <Tooltip
-            labelFormatter={formatTime}
-            formatter={(value) => (typeof value === "number" ? value.toFixed(2) : value)}
-            contentStyle={{ backgroundColor: "white", borderColor: "white" }}
-          />
-          <Legend />
-          <Line type="monotone" dataKey="price" name="Price" stroke="#45ba8b" strokeWidth={2} dot={false} />
-          <Scatter dataKey="buy" name="AI buy" fill="#2ecc71" shape="triangle" />
-          <Scatter dataKey="sell" name="AI sell" fill="#e74c3c" shape="diamond" />
-        </ComposedChart>
+          <div className="chart-legend">
+            <span style={{ "--c": "#55c2e8" } as React.CSSProperties}>Price</span>
+            <span style={{ "--c": "#f0b44c" } as React.CSSProperties}>AI buy (triangle) and sell (diamond)</span>
+          </div>
+        </>
       )}
 
       <WhyPanel
