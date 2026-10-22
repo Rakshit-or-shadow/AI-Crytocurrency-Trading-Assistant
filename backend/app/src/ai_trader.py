@@ -80,7 +80,8 @@ def decide_action(rl_signal, sentiment_score, in_position, risk_exit):
 
 class AITrader:
     def __init__(self, api_key, api_secret, trading_pair="BTC-USD", risk_config=None,
-                 starting_balance=100000.0, trade_interval_seconds=20, simulate_events=False):
+                 starting_balance=100000.0, trade_interval_seconds=20, simulate_events=False,
+                 load_rl_model=True):
         self.trading_pair = trading_pair
         self.ticker = trading_pair.split("-")[0]          # "BTC-USD" -> "BTC"
         self.risk_config = risk_config or risk.RiskConfig()
@@ -107,7 +108,7 @@ class AITrader:
         self.sentiment_score = 0
         self.last_sentiment_time = 0.0
 
-        self.rl_agent = self._load_rl_agent()
+        self.rl_agent = self._load_rl_agent() if load_rl_model else None
 
     # ---------- setup helpers ----------
 
