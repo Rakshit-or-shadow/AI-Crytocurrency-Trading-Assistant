@@ -1,0 +1,26 @@
+# Starts the whole app:  docker compose up --build
+#   Website:  http://localhost:3000
+#   API docs: http://localhost:8000/docs
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    ports:
+      - "8000:8000"
+    # Put your keys in backend/.env (copy backend/.env.example). The file is optional.
+    env_file:
+      - path: backend/.env
+        required: false
+    environment:
+      ALLOWED_ORIGINS: http://localhost:3000
+
+  frontend:
+    build:
+      context: frontend
+      args:
+        VITE_API_URL: http://localhost:8000
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend

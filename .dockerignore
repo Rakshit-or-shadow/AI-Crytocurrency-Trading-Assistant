@@ -1,0 +1,11 @@
+.git
+**/node_modules
+**/dist
+**/__pycache__
+**/.pytest_cache
+**/venv
+**/.venv
+**/.env
+backend/data/ai_trade_data.json
+backend/app/config.json
+backend/app/src/config.json
